@@ -145,6 +145,14 @@ e acesse `http://localhost:5500`.
 - Não incluído ainda: edição de reservas já lançadas (só criar e
   excluir por enquanto) e autocomplete de hóspedes recorrentes.
 
+## Identidade visual
+
+- `assets/img/logo.svg`: logo oficial da TR (T verde + R branco sobre
+  fundo azul), já na paleta do projeto. Declarada como favicon
+  (`<link rel="icon">`) em todas as páginas. O "TR" desenhado em
+  HTML/CSS no topo do menu lateral (`tr-logo-ring`) continua como
+  está por enquanto — dá pra trocar pelo SVG também, se preferir.
+
 ## Próximos passos (Etapa 5)
 
 - Criar `app/financeiro.html`: manutenções com dedução automática no
