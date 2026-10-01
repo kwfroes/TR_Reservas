@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Proprietários — TR Serviços de Reservas</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+<body class="min-h-screen bg-slate-50">
+
+  <div class="flex flex-col sm:flex-row min-h-screen">
+
+    <header class="sm:hidden flex items-center justify-between px-4 py-3 tr-bg-azul text-white sticky top-0 z-20">
+      <button id="btn-menu-abrir" aria-label="Abrir menu" aria-expanded="false" class="p-1 -ml-1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="tr-logo-ring rounded-md w-7 h-7 flex items-center justify-center">
+          <span class="text-xs font-extrabold"><span style="color: var(--tr-verde)">T</span><span class="text-white">R</span></span>
+        </div>
+        <span class="text-sm font-semibold">TR Reservas</span>
+      </div>
+      <span class="w-6" aria-hidden="true"></span>
+    </header>
+
+    <div id="sidebar-overlay" class="hidden sm:hidden fixed inset-0 bg-black/40 z-30"></div>
+
+    <aside id="sidebar"
+      class="fixed sm:static inset-y-0 left-0 z-40 w-64 sm:w-56 shrink-0 tr-bg-azul text-white flex flex-col -translate-x-full sm:translate-x-0 transition-transform duration-200">
+      <div class="flex items-center justify-between gap-2 px-4 py-4">
+        <div class="flex items-center gap-2">
+          <div class="tr-logo-ring rounded-md w-8 h-8 flex items-center justify-center shrink-0">
+            <span class="text-sm font-extrabold">
+              <span style="color: var(--tr-verde)">T</span><span class="text-white">R</span>
+            </span>
+          </div>
+          <span class="text-sm font-semibold">TR Reservas</span>
+        </div>
+        <button id="btn-menu-fechar" aria-label="Fechar menu" class="sm:hidden p-1 text-white/80 hover:text-white">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 px-2 space-y-1 text-sm">
+        <a href="dashboard.html" class="tr-nav-item block rounded-lg px-3 py-2">Dashboard</a>
+        <a href="reservas.html" class="tr-nav-item block rounded-lg px-3 py-2">Reservas</a>
+        <a href="imoveis.html" class="tr-nav-item block rounded-lg px-3 py-2">Imóveis</a>
+        <a href="proprietarios.html" class="tr-nav-item ativo block rounded-lg px-3 py-2">Proprietários</a>
+        <a href="financeiro.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor,administrador">Financeiro</a>
+        <a href="relatorios.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor,administrador">Relatórios</a>
+        <a href="parametros.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor">Parâmetros</a>
+      </nav>
+
+      <div class="px-4 py-4 border-t border-white/10">
+        <p id="usuario-nome" class="text-xs text-white/70 mb-2">—</p>
+        <button id="btn-sair" class="text-xs text-white/70 hover:text-white underline">Sair</button>
+      </div>
+    </aside>
+
+    <main class="flex-1 p-4 sm:p-6 min-w-0">
+     <div class="max-w-4xl mx-auto">
+
+      <div class="flex items-center justify-between mb-1">
+        <h1 class="text-xl font-bold text-slate-900">Proprietários</h1>
+        <button id="btn-novo" class="tr-btn rounded-lg px-3 py-2 text-sm font-semibold">+ Novo proprietário</button>
+      </div>
+      <p class="text-sm text-slate-500 mb-6">Dados cadastrais e contas de repasse.</p>
+
+      <section class="bg-white rounded-xl border border-slate-200 mb-6">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-slate-500 border-b border-slate-200">
+                <th class="px-5 py-2 font-medium">Nome</th>
+                <th class="px-5 py-2 font-medium">CPF/CNPJ</th>
+                <th class="px-5 py-2 font-medium">Contato</th>
+                <th class="px-5 py-2 font-medium"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-proprietarios"></tbody>
+          </table>
+          <p id="lista-vazia" class="hidden px-5 py-6 text-sm text-slate-400">Nenhum proprietário cadastrado ainda.</p>
+        </div>
+      </section>
+
+     </div>
+    </main>
+  </div>
+
+  <!-- Template do conteúdo do modal de edição (clonado a cada abertura) -->
+  <template id="template-edicao">
+    <form id="form-proprietario" class="space-y-3 pb-4 mb-4 border-b border-slate-200">
+      <input type="hidden" id="prop-id">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Nome completo</label>
+          <input id="prop-nome" type="text" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">CPF/CNPJ</label>
+          <input id="prop-cpf" type="text" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Telefone</label>
+          <input id="prop-telefone" type="text" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">E-mail</label>
+          <input id="prop-email" type="email" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+      </div>
+      <div class="flex justify-end pt-1">
+        <button type="submit" class="tr-btn rounded-lg px-4 py-2 text-sm font-semibold">Salvar dados</button>
+      </div>
+    </form>
+
+    <div id="bloco-contas" data-perfil="gestor,administrador">
+      <h3 class="text-sm font-semibold text-slate-900 mb-1">Contas bancárias</h3>
+      <p id="aviso-salvar-antes" class="text-xs text-amber-600 mb-3">Salve os dados do proprietário antes de adicionar contas.</p>
+
+      <div id="area-contas" class="hidden">
+        <form id="form-conta" class="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-3">
+          <input id="conta-favorecido" type="text" placeholder="Favorecido" required
+            class="tr-input col-span-2 sm:col-span-1 rounded-lg border border-slate-300 px-2 py-2 text-sm">
+          <input id="conta-tipo" type="text" placeholder="Tipo (PIX, BB...)" required
+            class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+          <input id="conta-dados" type="text" placeholder="Chave PIX / agência e conta" required
+            class="tr-input col-span-2 sm:col-span-2 rounded-lg border border-slate-300 px-2 py-2 text-sm">
+          <button type="submit" class="tr-btn rounded-lg px-3 py-2 text-sm font-semibold">+ Conta</button>
+        </form>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-slate-500 border-b border-slate-200">
+                <th class="py-2 font-medium">Favorecido</th>
+                <th class="py-2 font-medium">Tipo</th>
+                <th class="py-2 font-medium">Dados</th>
+                <th class="py-2 font-medium">Padrão</th>
+                <th class="py-2 font-medium"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-contas"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </template>
+
+<script type="module">
+  import { exigirSessao, sair, aplicarVisibilidadePorPerfil } from '../assets/js/auth-guard.js';
+  import { initSidebarMobile } from '../assets/js/sidebar.js';
+  import { supabase } from '../assets/js/supabaseClient.js';
+  import { abrirModal, fecharModal, mostrarAlerta, confirmarAcao } from '../assets/js/modal.js';
+
+  initSidebarMobile();
+
+  const { nome, perfil } = await exigirSessao();
+  document.getElementById('usuario-nome').textContent = `${nome} · ${perfil}`;
+  aplicarVisibilidadePorPerfil(perfil);
+  document.getElementById('btn-sair').addEventListener('click', sair);
+
+  let proprietarioAtualId = null;
+
+  // ----------------------- Lista de proprietários -----------------------
+  async function carregarLista() {
+    const { data, error } = await supabase.from('proprietarios').select('*').order('nome');
+    if (error) { await mostrarAlerta('Erro ao carregar: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-proprietarios');
+    tbody.innerHTML = '';
+    document.getElementById('lista-vazia').classList.toggle('hidden', data.length > 0);
+
+    data.forEach((p) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100';
+      tr.innerHTML = `
+        <td class="px-5 py-2.5 font-medium text-slate-800">${p.nome}</td>
+        <td class="px-5 py-2.5 text-slate-500">${p.cpf_cnpj || '—'}</td>
+        <td class="px-5 py-2.5 text-slate-500">${p.telefone || p.email || '—'}</td>
+        <td class="px-5 py-2.5 text-right">
+          <button data-id="${p.id}" class="btn-editar text-xs text-blue-600 hover:underline mr-3">Editar</button>
+          <button data-id="${p.id}" class="btn-excluir text-xs text-red-600 hover:underline">Excluir</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-editar').forEach((b) => b.addEventListener('click', () => abrirEdicao(b.dataset.id)));
+    tbody.querySelectorAll('.btn-excluir').forEach((b) => b.addEventListener('click', () => excluirProprietario(b.dataset.id)));
+  }
+
+  async function excluirProprietario(id) {
+    const ok = await confirmarAcao('Excluir este proprietário? Só é possível se não houver imóveis ou contas vinculados a ele.', { perigo: true, textoConfirmar: 'Excluir' });
+    if (!ok) return;
+    const { error } = await supabase.from('proprietarios').delete().eq('id', id);
+    if (error) { await mostrarAlerta('Não foi possível excluir: ' + error.message, { titulo: 'Erro' }); return; }
+    carregarLista();
+  }
+
+  // ----------------------- Modal de edição -----------------------
+  function montarCorpoModal() {
+    const template = document.getElementById('template-edicao');
+    return template.content.cloneNode(true);
+  }
+
+  function ligarEventosDoModal() {
+    aplicarVisibilidadePorPerfil(perfil); // o bloco de contas tem data-perfil; precisa reavaliar após inserir no DOM
+    document.getElementById('form-proprietario').addEventListener('submit', salvarProprietario);
+    document.getElementById('form-conta').addEventListener('submit', salvarConta);
+  }
+
+  function abrirPainelNovo() {
+    proprietarioAtualId = null;
+    const corpo = montarCorpoModal();
+    abrirModal({ titulo: 'Novo proprietário', corpoEl: corpo, largura: 'max-w-lg' });
+    ligarEventosDoModal();
+    document.getElementById('aviso-salvar-antes').classList.remove('hidden');
+    document.getElementById('prop-nome').focus();
+  }
+
+  async function abrirEdicao(id) {
+    const { data, error } = await supabase.from('proprietarios').select('*').eq('id', id).single();
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+
+    proprietarioAtualId = id;
+    const corpo = montarCorpoModal();
+    abrirModal({ titulo: `Editar — ${data.nome}`, corpoEl: corpo, largura: 'max-w-lg' });
+    ligarEventosDoModal();
+
+    document.getElementById('prop-id').value = data.id;
+    document.getElementById('prop-nome').value = data.nome || '';
+    document.getElementById('prop-cpf').value = data.cpf_cnpj || '';
+    document.getElementById('prop-telefone').value = data.telefone || '';
+    document.getElementById('prop-email').value = data.email || '';
+
+    document.getElementById('aviso-salvar-antes').classList.add('hidden');
+    document.getElementById('area-contas').classList.remove('hidden');
+    carregarContas(id);
+  }
+
+  document.getElementById('btn-novo').addEventListener('click', abrirPainelNovo);
+
+  async function salvarProprietario(e) {
+    e.preventDefault();
+    const payload = {
+      nome: document.getElementById('prop-nome').value.trim(),
+      cpf_cnpj: document.getElementById('prop-cpf').value.trim() || null,
+      telefone: document.getElementById('prop-telefone').value.trim() || null,
+      email: document.getElementById('prop-email').value.trim() || null,
+    };
+
+    if (proprietarioAtualId) {
+      const { error } = await supabase.from('proprietarios').update(payload).eq('id', proprietarioAtualId);
+      if (error) { await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' }); return; }
+    } else {
+      const { data, error } = await supabase.from('proprietarios').insert(payload).select().single();
+      if (error) { await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' }); return; }
+      proprietarioAtualId = data.id;
+      document.getElementById('modal-titulo').textContent = `Editar — ${data.nome}`;
+      document.getElementById('aviso-salvar-antes').classList.add('hidden');
+      document.getElementById('area-contas').classList.remove('hidden');
+      carregarContas(proprietarioAtualId);
+    }
+    carregarLista();
+  }
+
+  // ----------------------- Contas bancárias -----------------------
+  async function carregarContas(proprietarioId) {
+    const { data, error } = await supabase
+      .from('contas_bancarias')
+      .select('*')
+      .eq('proprietario_id', proprietarioId)
+      .order('padrao', { ascending: false });
+
+    if (error) { await mostrarAlerta('Erro ao carregar contas: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-contas');
+    if (!tbody) return; // modal pode já ter sido fechado
+    tbody.innerHTML = '';
+    data.forEach((c) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100';
+      tr.innerHTML = `
+        <td class="py-2">${c.favorecido}</td>
+        <td class="py-2 text-slate-500">${c.tipo}</td>
+        <td class="py-2 text-slate-500">${c.dados_bancarios}</td>
+        <td class="py-2">${c.padrao
+          ? '<span class="text-xs text-green-700 bg-green-50 rounded px-2 py-0.5">padrão</span>'
+          : `<button data-id="${c.id}" class="btn-tornar-padrao text-xs text-blue-600 hover:underline">tornar padrão</button>`}</td>
+        <td class="py-2 text-right"><button data-id="${c.id}" class="btn-excluir-conta text-xs text-red-600 hover:underline">Remover</button></td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-tornar-padrao').forEach((b) => b.addEventListener('click', () => tornarPadrao(b.dataset.id, proprietarioId)));
+    tbody.querySelectorAll('.btn-excluir-conta').forEach((b) => b.addEventListener('click', () => excluirConta(b.dataset.id, proprietarioId)));
+  }
+
+  async function salvarConta(e) {
+    e.preventDefault();
+    if (!proprietarioAtualId) return;
+
+    const { error } = await supabase.from('contas_bancarias').insert({
+      proprietario_id: proprietarioAtualId,
+      favorecido: document.getElementById('conta-favorecido').value.trim(),
+      tipo: document.getElementById('conta-tipo').value.trim(),
+      dados_bancarios: document.getElementById('conta-dados').value.trim(),
+      padrao: false,
+    });
+
+    if (error) { await mostrarAlerta('Erro ao salvar conta: ' + error.message, { titulo: 'Erro' }); return; }
+    e.target.reset();
+    carregarContas(proprietarioAtualId);
+  }
+
+  async function tornarPadrao(contaId, proprietarioId) {
+    await supabase.from('contas_bancarias').update({ padrao: false }).eq('proprietario_id', proprietarioId);
+    const { error } = await supabase.from('contas_bancarias').update({ padrao: true }).eq('id', contaId);
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+    carregarContas(proprietarioId);
+  }
+
+  async function excluirConta(contaId, proprietarioId) {
+    const ok = await confirmarAcao('Remover esta conta bancária?', { perigo: true, textoConfirmar: 'Remover' });
+    if (!ok) return;
+    const { error } = await supabase.from('contas_bancarias').delete().eq('id', contaId);
+    if (error) { await mostrarAlerta('Não foi possível remover: ' + error.message, { titulo: 'Erro' }); return; }
+    carregarContas(proprietarioId);
+  }
+
+  carregarLista();
+</script>
+</body>
+</html>

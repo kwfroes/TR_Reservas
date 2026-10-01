@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reservas — TR Serviços de Reservas</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+<body class="min-h-screen bg-slate-50">
+
+  <div class="flex flex-col sm:flex-row min-h-screen">
+
+    <header class="sm:hidden flex items-center justify-between px-4 py-3 tr-bg-azul text-white sticky top-0 z-20">
+      <button id="btn-menu-abrir" aria-label="Abrir menu" aria-expanded="false" class="p-1 -ml-1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="tr-logo-ring rounded-md w-7 h-7 flex items-center justify-center">
+          <span class="text-xs font-extrabold"><span style="color: var(--tr-verde)">T</span><span class="text-white">R</span></span>
+        </div>
+        <span class="text-sm font-semibold">TR Reservas</span>
+      </div>
+      <span class="w-6" aria-hidden="true"></span>
+    </header>
+
+    <div id="sidebar-overlay" class="hidden sm:hidden fixed inset-0 bg-black/40 z-30"></div>
+
+    <aside id="sidebar"
+      class="fixed sm:static inset-y-0 left-0 z-40 w-64 sm:w-56 shrink-0 tr-bg-azul text-white flex flex-col -translate-x-full sm:translate-x-0 transition-transform duration-200">
+      <div class="flex items-center justify-between gap-2 px-4 py-4">
+        <div class="flex items-center gap-2">
+          <div class="tr-logo-ring rounded-md w-8 h-8 flex items-center justify-center shrink-0">
+            <span class="text-sm font-extrabold">
+              <span style="color: var(--tr-verde)">T</span><span class="text-white">R</span>
+            </span>
+          </div>
+          <span class="text-sm font-semibold">TR Reservas</span>
+        </div>
+        <button id="btn-menu-fechar" aria-label="Fechar menu" class="sm:hidden p-1 text-white/80 hover:text-white">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 px-2 space-y-1 text-sm">
+        <a href="dashboard.html" class="tr-nav-item block rounded-lg px-3 py-2">Dashboard</a>
+        <a href="reservas.html" class="tr-nav-item ativo block rounded-lg px-3 py-2">Reservas</a>
+        <a href="imoveis.html" class="tr-nav-item block rounded-lg px-3 py-2">Imóveis</a>
+        <a href="proprietarios.html" class="tr-nav-item block rounded-lg px-3 py-2">Proprietários</a>
+        <a href="financeiro.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor,administrador">Financeiro</a>
+        <a href="relatorios.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor,administrador">Relatórios</a>
+        <a href="parametros.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor">Parâmetros</a>
+      </nav>
+
+      <div class="px-4 py-4 border-t border-white/10">
+        <p id="usuario-nome" class="text-xs text-white/70 mb-2">—</p>
+        <button id="btn-sair" class="text-xs text-white/70 hover:text-white underline">Sair</button>
+      </div>
+    </aside>
+
+    <main class="flex-1 p-4 sm:p-6 min-w-0">
+     <div class="max-w-5xl mx-auto">
+
+      <div class="flex items-center justify-between mb-1">
+        <h1 class="text-xl font-bold text-slate-900">Reservas</h1>
+        <button id="btn-nova-reserva" class="tr-btn rounded-lg px-3 py-2 text-sm font-semibold">+ Nova reserva</button>
+      </div>
+      <p class="text-sm text-slate-500 mb-4">Lançamento, cálculo automático e bloqueio de datas sobrepostas.</p>
+
+      <!-- Filtros -->
+      <div class="flex flex-wrap items-center gap-2 mb-4">
+        <select id="filtro-imovel" class="tr-input rounded-lg border border-slate-300 px-3 py-2 text-sm">
+          <option value="">Todos os imóveis</option>
+        </select>
+        <input id="filtro-mes" type="month" class="tr-input rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        <button id="btn-limpar-filtros" class="text-xs text-slate-500 hover:underline">Limpar filtros</button>
+      </div>
+
+      <!-- Lista de reservas -->
+      <section class="bg-white rounded-xl border border-slate-200 mb-8">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-slate-500 border-b border-slate-200">
+                <th class="px-5 py-2 font-medium">Imóvel</th>
+                <th class="px-5 py-2 font-medium">Hóspede</th>
+                <th class="px-5 py-2 font-medium">Entrada</th>
+                <th class="px-5 py-2 font-medium">Saída</th>
+                <th class="px-5 py-2 font-medium text-right">Valor</th>
+                <th class="px-5 py-2 font-medium text-right">Comissão</th>
+                <th class="px-5 py-2 font-medium text-right">Repasse</th>
+                <th class="px-5 py-2 font-medium"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-reservas"></tbody>
+          </table>
+          <p id="lista-vazia" class="hidden px-5 py-6 text-sm text-slate-400">Nenhuma reserva encontrada.</p>
+        </div>
+      </section>
+
+      <!-- Reservas diretas -->
+      <div class="flex items-center justify-between mb-1">
+        <h2 class="text-lg font-bold text-slate-900">Reservas diretas</h2>
+        <button id="btn-nova-direta" class="tr-btn rounded-lg px-3 py-2 text-sm font-semibold">+ Nova</button>
+      </div>
+      <p class="text-sm text-slate-500 mb-4">Contratos fechados diretamente com o hóspede, fora das plataformas.</p>
+
+      <section class="bg-white rounded-xl border border-slate-200 mb-6">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-slate-500 border-b border-slate-200">
+                <th class="px-5 py-2 font-medium">Imóvel</th>
+                <th class="px-5 py-2 font-medium">Hóspede</th>
+                <th class="px-5 py-2 font-medium">Período</th>
+                <th class="px-5 py-2 font-medium text-right">Contrato</th>
+                <th class="px-5 py-2 font-medium text-right">Adiantado</th>
+                <th class="px-5 py-2 font-medium">Status</th>
+                <th class="px-5 py-2 font-medium"></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-diretas"></tbody>
+          </table>
+          <p id="diretas-vazio" class="hidden px-5 py-6 text-sm text-slate-400">Nenhuma reserva direta cadastrada.</p>
+        </div>
+      </section>
+
+     </div>
+    </main>
+  </div>
+
+  <!-- Template: nova reserva (plataforma) -->
+  <template id="template-reserva">
+    <form id="form-reserva" class="space-y-4">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-medium text-slate-600 mb-1">Imóvel *</label>
+          <select id="rv-imovel" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Hóspede *</label>
+          <input id="rv-hospede" type="text" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Canal de venda *</label>
+          <select id="rv-canal" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Data de entrada *</label>
+          <input id="rv-entrada" type="date" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Data de saída *</label>
+          <input id="rv-saida" type="date" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Valor total da reserva (R$) *</label>
+          <input id="rv-valor" type="number" step="0.01" min="0" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+          <p class="text-xs text-slate-400 mt-1">Total pago pelo hóspede, já incluindo a limpeza.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Taxa de limpeza (R$) *</label>
+          <input id="rv-limpeza" type="number" step="0.01" min="0" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Conta de repasse</label>
+          <select id="rv-conta" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Número da nota fiscal</label>
+          <input id="rv-nf" type="text" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-medium text-slate-600 mb-1">Observação</label>
+          <textarea id="rv-observacao" rows="2" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-100 pt-3">
+        <label class="flex items-center gap-2 text-sm text-slate-700">
+          <input id="rv-ajuste" type="checkbox" class="rounded border-slate-300">
+          Ajustar comissão manualmente (caso especial)
+        </label>
+        <div id="area-ajuste" class="hidden grid sm:grid-cols-2 gap-3 mt-2">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Comissão manual (R$) *</label>
+            <input id="rv-comissao-manual" type="number" step="0.01" min="0" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Justificativa *</label>
+            <input id="rv-justificativa" type="text" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+          </div>
+        </div>
+      </div>
+
+      <!-- Prévia de cálculo -->
+      <div id="preview-calculo" class="bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm">
+        <p class="text-slate-400">Preencha imóvel, datas e valores para ver o cálculo.</p>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-1">
+        <button type="submit" class="tr-btn rounded-lg px-4 py-2 text-sm font-semibold">Salvar reserva</button>
+      </div>
+    </form>
+  </template>
+
+  <!-- Template: nova reserva direta -->
+  <template id="template-direta">
+    <form id="form-direta" class="space-y-3">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-medium text-slate-600 mb-1">Imóvel *</label>
+          <select id="dr-imovel" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></select>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-medium text-slate-600 mb-1">Hóspede *</label>
+          <input id="dr-hospede" type="text" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Período — início</label>
+          <input id="dr-inicio" type="date" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Período — fim</label>
+          <input id="dr-fim" type="date" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Valor do contrato (R$) *</label>
+          <input id="dr-valor" type="number" step="0.01" min="0" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Valor adiantado (R$)</label>
+          <input id="dr-adiantado" type="number" step="0.01" min="0" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-medium text-slate-600 mb-1">Status</label>
+          <select id="dr-status" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            <option value="pendente">Pendente</option>
+            <option value="ok">Ok</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-end pt-1">
+        <button type="submit" class="tr-btn rounded-lg px-4 py-2 text-sm font-semibold">Salvar</button>
+      </div>
+    </form>
+  </template>
+
+<script type="module">
+  import { exigirSessao, sair, aplicarVisibilidadePorPerfil } from '../assets/js/auth-guard.js';
+  import { initSidebarMobile } from '../assets/js/sidebar.js';
+  import { supabase } from '../assets/js/supabaseClient.js';
+  import { abrirModal, mostrarAlerta, confirmarAcao } from '../assets/js/modal.js';
+  import { calcularComissao, dividirCompetencia } from '../assets/js/calculo.js';
+
+  initSidebarMobile();
+
+  const { nome, perfil } = await exigirSessao();
+  document.getElementById('usuario-nome').textContent = `${nome} · ${perfil}`;
+  aplicarVisibilidadePorPerfil(perfil);
+  document.getElementById('btn-sair').addEventListener('click', sair);
+
+  const fmtMoeda = (v) => (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const fmtData = (iso) => new Date(iso + 'T00:00:00').toLocaleDateString('pt-BR');
+  const mesmoMes = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
+
+  let imoveisCache = []; // [{id, codigo_interno, nome_referencia, proprietario_id}]
+
+  async function carregarImoveis() {
+    if (imoveisCache.length) return imoveisCache;
+    const { data, error } = await supabase
+      .from('imoveis')
+      .select('id, codigo_interno, nome_referencia, proprietario_id')
+      .order('nome_referencia');
+    if (error) { await mostrarAlerta('Erro ao carregar imóveis: ' + error.message, { titulo: 'Erro' }); return []; }
+    imoveisCache = data;
+    return data;
+  }
+
+  async function preencherSelectImoveis(selectEl, incluirTodos = false) {
+    const imoveis = await carregarImoveis();
+    selectEl.innerHTML = incluirTodos ? '<option value="">Todos os imóveis</option>' : '<option value="">Selecione...</option>';
+    imoveis.forEach((im) => {
+      const opt = document.createElement('option');
+      opt.value = im.id;
+      opt.textContent = `${im.nome_referencia} (${im.codigo_interno})`;
+      selectEl.appendChild(opt);
+    });
+  }
+
+  async function carregarCanais(selectEl) {
+    const { data, error } = await supabase.from('canais_venda').select('id, nome').order('nome');
+    if (error) { await mostrarAlerta('Erro ao carregar canais: ' + error.message, { titulo: 'Erro' }); return; }
+    selectEl.innerHTML = '<option value="">Selecione...</option>';
+    data.forEach((c) => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.nome;
+      selectEl.appendChild(opt);
+    });
+  }
+
+  async function carregarContasDoImovel(imovelId, selectEl) {
+    selectEl.innerHTML = '<option value="">Sem conta definida</option>';
+    if (!imovelId) return;
+    const imovel = imoveisCache.find((im) => im.id === imovelId);
+    if (!imovel) return;
+    const { data, error } = await supabase
+      .from('contas_bancarias')
+      .select('id, favorecido, tipo, padrao')
+      .eq('proprietario_id', imovel.proprietario_id)
+      .order('padrao', { ascending: false });
+    if (error) { await mostrarAlerta('Erro ao carregar contas: ' + error.message, { titulo: 'Erro' }); return; }
+    data.forEach((c) => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = `${c.favorecido} — ${c.tipo}${c.padrao ? ' (padrão)' : ''}`;
+      selectEl.appendChild(opt);
+    });
+  }
+
+  // ----------------------- Filtros e lista de reservas -----------------------
+  async function inicializarFiltros() {
+    await preencherSelectImoveis(document.getElementById('filtro-imovel'), true);
+    document.getElementById('filtro-imovel').addEventListener('change', carregarReservas);
+    document.getElementById('filtro-mes').addEventListener('change', carregarReservas);
+    document.getElementById('btn-limpar-filtros').addEventListener('click', () => {
+      document.getElementById('filtro-imovel').value = '';
+      document.getElementById('filtro-mes').value = '';
+      carregarReservas();
+    });
+  }
+
+  async function carregarReservas() {
+    let query = supabase
+      .from('reservas')
+      .select('id, hospede, data_entrada, data_saida, valor_bruto, valor_comissao, valor_proprietario, imoveis!imovel_id(nome_referencia)')
+      .order('data_entrada', { ascending: false })
+      .limit(100);
+
+    const imovelId = document.getElementById('filtro-imovel').value;
+    if (imovelId) query = query.eq('imovel_id', imovelId);
+
+    const mes = document.getElementById('filtro-mes').value; // 'YYYY-MM'
+    if (mes) {
+      const inicio = `${mes}-01`;
+      const [ano, mesNum] = mes.split('-').map(Number);
+      const fim = mesNum === 12 ? `${ano + 1}-01-01` : `${ano}-${String(mesNum + 1).padStart(2, '0')}-01`;
+      query = query.gte('data_entrada', inicio).lt('data_entrada', fim);
+    }
+
+    const { data, error } = await query;
+    if (error) { await mostrarAlerta('Erro ao carregar reservas: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-reservas');
+    tbody.innerHTML = '';
+    document.getElementById('lista-vazia').classList.toggle('hidden', data.length > 0);
+
+    data.forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100';
+      tr.innerHTML = `
+        <td class="px-5 py-2.5 font-medium text-slate-800">${r.imoveis?.nome_referencia || '—'}</td>
+        <td class="px-5 py-2.5 text-slate-600">${r.hospede}</td>
+        <td class="px-5 py-2.5 text-slate-500">${fmtData(r.data_entrada)}</td>
+        <td class="px-5 py-2.5 text-slate-500">${fmtData(r.data_saida)}</td>
+        <td class="px-5 py-2.5 text-right">${fmtMoeda(r.valor_bruto)}</td>
+        <td class="px-5 py-2.5 text-right text-slate-500">${fmtMoeda(r.valor_comissao)}</td>
+        <td class="px-5 py-2.5 text-right text-slate-500">${fmtMoeda(r.valor_proprietario)}</td>
+        <td class="px-5 py-2.5 text-right"><button data-id="${r.id}" class="btn-excluir-reserva text-xs text-red-600 hover:underline">Excluir</button></td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-excluir-reserva').forEach((b) => b.addEventListener('click', () => excluirReserva(b.dataset.id)));
+  }
+
+  async function excluirReserva(id) {
+    const ok = await confirmarAcao('Excluir esta reserva? Isso também libera as datas no calendário do imóvel.', { perigo: true, textoConfirmar: 'Excluir' });
+    if (!ok) return;
+    const { error } = await supabase.from('reservas').delete().eq('id', id);
+    if (error) { await mostrarAlerta('Erro ao excluir: ' + error.message, { titulo: 'Erro' }); return; }
+    carregarReservas();
+  }
+
+  // ----------------------- Nova reserva (plataforma) -----------------------
+  let timerPreview = null;
+
+  function lerCamposReserva() {
+    return {
+      imovelId: document.getElementById('rv-imovel').value,
+      dataEntrada: document.getElementById('rv-entrada').value,
+      dataSaida: document.getElementById('rv-saida').value,
+      valorBruto: Number(document.getElementById('rv-valor').value || 0),
+      valorLimpeza: Number(document.getElementById('rv-limpeza').value || 0),
+      ajusteManual: document.getElementById('rv-ajuste').checked,
+      comissaoManual: Number(document.getElementById('rv-comissao-manual').value || 0),
+    };
+  }
+
+  function agendarPreview() {
+    clearTimeout(timerPreview);
+    timerPreview = setTimeout(atualizarPreview, 350);
+  }
+
+  async function atualizarPreview() {
+    const caixa = document.getElementById('preview-calculo');
+    const { imovelId, dataEntrada, dataSaida, valorBruto, valorLimpeza, ajusteManual, comissaoManual } = lerCamposReserva();
+
+    if (!imovelId || !dataEntrada || !dataSaida || !valorBruto) {
+      caixa.innerHTML = '<p class="text-slate-400">Preencha imóvel, datas e valores para ver o cálculo.</p>';
+      return;
+    }
+    if (dataSaida <= dataEntrada) {
+      caixa.innerHTML = '<p class="text-red-600">A data de saída deve ser depois da entrada.</p>';
+      return;
+    }
+
+    const entrada = new Date(dataEntrada + 'T00:00:00');
+    const saida = new Date(dataSaida + 'T00:00:00');
+    const noites = Math.round((saida - entrada) / 86400000);
+
+    let comissao, regraTexto;
+    if (ajusteManual) {
+      comissao = comissaoManual;
+      regraTexto = 'ajuste manual';
+    } else {
+      const resultado = await calcularComissao({ valorBruto, valorLimpeza, imovelId, dataRef: dataEntrada });
+      comissao = resultado.comissao;
+      regraTexto = resultado.regraAplicada.nivel
+        ? `${resultado.regraAplicada.percentual != null ? (resultado.regraAplicada.percentual * 100).toFixed(0) + '%' : fmtMoeda(resultado.regraAplicada.valor)} · regra do ${resultado.regraAplicada.nivel === 'imovel' ? 'imóvel' : 'parâmetro geral'}`
+        : 'nenhuma regra cadastrada — comissão zerada';
+    }
+
+    const valorProprietario = valorBruto - valorLimpeza - comissao;
+
+    let html = `
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div><p class="text-xs text-slate-400">Noites</p><p class="font-semibold text-slate-800">${noites}</p></div>
+        <div><p class="text-xs text-slate-400">Comissão</p><p class="font-semibold text-slate-800">${fmtMoeda(comissao)}</p></div>
+        <div><p class="text-xs text-slate-400">Repasse</p><p class="font-semibold text-slate-800">${fmtMoeda(valorProprietario)}</p></div>
+      </div>
+      <p class="text-xs text-slate-400 mt-2 text-center">${regraTexto}</p>`;
+
+    if (!mesmoMes(entrada, saida)) {
+      const diarias = valorBruto - valorLimpeza;
+      const divisao = dividirCompetencia({ dataEntrada, dataSaida, valorBruto: diarias, valorComissao: comissao, valorLimpeza });
+      html += `
+        <div class="mt-3 pt-3 border-t border-slate-200">
+          <p class="text-xs font-medium text-slate-600 mb-2">Atravessa virada de mês — divisão de competência:</p>
+          <table class="w-full text-xs">
+            <thead><tr class="text-slate-400"><th class="text-left font-medium">Mês</th><th class="text-right font-medium">Noites</th><th class="text-right font-medium">Repasse</th></tr></thead>
+            <tbody>
+              ${divisao.map((l) => `<tr><td>${l.mesReferencia.slice(0, 7)}</td><td class="text-right">${l.noites}</td><td class="text-right">${fmtMoeda(l.valorProprietarioMes)}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div>`;
+    }
+
+    caixa.innerHTML = html;
+  }
+
+  function ligarPreview() {
+    ['rv-imovel', 'rv-entrada', 'rv-saida', 'rv-valor', 'rv-limpeza', 'rv-ajuste', 'rv-comissao-manual'].forEach((id) => {
+      document.getElementById(id).addEventListener('input', agendarPreview);
+      document.getElementById(id).addEventListener('change', agendarPreview);
+    });
+    document.getElementById('rv-ajuste').addEventListener('change', (e) => {
+      document.getElementById('area-ajuste').classList.toggle('hidden', !e.target.checked);
+    });
+    document.getElementById('rv-imovel').addEventListener('change', (e) => {
+      carregarContasDoImovel(e.target.value, document.getElementById('rv-conta'));
+    });
+  }
+
+  async function abrirModalNovaReserva() {
+    const corpo = document.getElementById('template-reserva').content.cloneNode(true);
+    abrirModal({ titulo: 'Nova reserva', corpoEl: corpo, largura: 'max-w-xl' });
+
+    await preencherSelectImoveis(document.getElementById('rv-imovel'));
+    await carregarCanais(document.getElementById('rv-canal'));
+    ligarPreview();
+    document.getElementById('form-reserva').addEventListener('submit', salvarReserva);
+  }
+
+  async function salvarReserva(e) {
+    e.preventDefault();
+    const { imovelId, dataEntrada, dataSaida, valorBruto, valorLimpeza, ajusteManual, comissaoManual } = lerCamposReserva();
+
+    if (dataSaida <= dataEntrada) {
+      await mostrarAlerta('A data de saída deve ser depois da entrada.', { titulo: 'Datas inválidas' });
+      return;
+    }
+    if (ajusteManual && !document.getElementById('rv-justificativa').value.trim()) {
+      await mostrarAlerta('Informe a justificativa do ajuste manual.', { titulo: 'Campo obrigatório' });
+      return;
+    }
+
+    let comissao, regraAplicada;
+    if (ajusteManual) {
+      comissao = comissaoManual;
+      regraAplicada = { nivel: 'manual' };
+    } else {
+      const resultado = await calcularComissao({ valorBruto, valorLimpeza, imovelId, dataRef: dataEntrada });
+      comissao = resultado.comissao;
+      regraAplicada = resultado.regraAplicada;
+    }
+    const valorProprietario = valorBruto - valorLimpeza - comissao;
+
+    const payload = {
+      imovel_id: imovelId,
+      canal_id: document.getElementById('rv-canal').value || null,
+      hospede: document.getElementById('rv-hospede').value.trim(),
+      data_entrada: dataEntrada,
+      data_saida: dataSaida,
+      valor_bruto: valorBruto,
+      valor_limpeza: valorLimpeza,
+      valor_comissao: comissao,
+      valor_proprietario: valorProprietario,
+      regra_comissao_aplicada: regraAplicada,
+      numero_nf: document.getElementById('rv-nf').value.trim() || null,
+      conta_bancaria_id: document.getElementById('rv-conta').value || null,
+      observacao: document.getElementById('rv-observacao').value.trim() || null,
+      ajuste_manual: ajusteManual,
+      justificativa_ajuste: ajusteManual ? document.getElementById('rv-justificativa').value.trim() : null,
+    };
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    const { data, error } = await supabase.from('reservas').insert(payload).select().single();
+
+    btn.disabled = false;
+    btn.textContent = 'Salvar reserva';
+
+    if (error) {
+      if (error.code === '23P01' || (error.message || '').includes('sem_overbooking')) {
+        await mostrarAlerta('Já existe uma reserva nesse imóvel que se sobrepõe a essas datas. Verifique o calendário e ajuste o período.', { titulo: 'Datas indisponíveis' });
+      } else {
+        await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' });
+      }
+      return;
+    }
+
+    // Se atravessa virada de mês, grava a divisão de competência.
+    const entrada = new Date(dataEntrada + 'T00:00:00');
+    const saida = new Date(dataSaida + 'T00:00:00');
+    if (!mesmoMes(entrada, saida)) {
+      const diarias = valorBruto - valorLimpeza;
+      const divisao = dividirCompetencia({ dataEntrada, dataSaida, valorBruto: diarias, valorComissao: comissao, valorLimpeza });
+      const linhas = divisao.map((l) => ({
+        reserva_id: data.id,
+        mes_referencia: l.mesReferencia,
+        noites: l.noites,
+        valor_bruto_mes: l.valorBrutoMes,
+        valor_comissao_mes: l.valorComissaoMes,
+        valor_proprietario_mes: l.valorProprietarioMes,
+      }));
+      const { error: erroComp } = await supabase.from('reserva_competencias').insert(linhas);
+      if (erroComp) await mostrarAlerta('Reserva salva, mas houve um erro ao gravar a divisão por mês: ' + erroComp.message, { titulo: 'Atenção' });
+    }
+
+    await mostrarAlerta('Reserva salva com sucesso.', { titulo: 'Pronto' });
+    carregarReservas();
+  }
+
+  document.getElementById('btn-nova-reserva').addEventListener('click', abrirModalNovaReserva);
+
+  // ----------------------- Reservas diretas -----------------------
+  async function carregarDiretas() {
+    const { data, error } = await supabase
+      .from('reservas_diretas')
+      .select('id, hospede, periodo_inicio, periodo_fim, valor_contrato, valor_adiantado, status, imoveis!imovel_id(nome_referencia)')
+      .order('criado_em', { ascending: false });
+
+    if (error) { await mostrarAlerta('Erro ao carregar reservas diretas: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-diretas');
+    tbody.innerHTML = '';
+    document.getElementById('diretas-vazio').classList.toggle('hidden', data.length > 0);
+
+    const rotuloStatus = { pendente: 'Pendente', ok: 'Ok', cancelado: 'Cancelado' };
+
+    data.forEach((r) => {
+      const periodo = r.periodo_inicio && r.periodo_fim ? `${fmtData(r.periodo_inicio)} – ${fmtData(r.periodo_fim)}` : '—';
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100';
+      tr.innerHTML = `
+        <td class="px-5 py-2.5 font-medium text-slate-800">${r.imoveis?.nome_referencia || '—'}</td>
+        <td class="px-5 py-2.5 text-slate-600">${r.hospede}</td>
+        <td class="px-5 py-2.5 text-slate-500">${periodo}</td>
+        <td class="px-5 py-2.5 text-right">${fmtMoeda(r.valor_contrato)}</td>
+        <td class="px-5 py-2.5 text-right text-slate-500">${fmtMoeda(r.valor_adiantado)}</td>
+        <td class="px-5 py-2.5 text-slate-500">${rotuloStatus[r.status] || r.status}</td>
+        <td class="px-5 py-2.5 text-right"><button data-id="${r.id}" class="btn-excluir-direta text-xs text-red-600 hover:underline">Excluir</button></td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-excluir-direta').forEach((b) => b.addEventListener('click', () => excluirDireta(b.dataset.id)));
+  }
+
+  async function excluirDireta(id) {
+    const ok = await confirmarAcao('Excluir esta reserva direta?', { perigo: true, textoConfirmar: 'Excluir' });
+    if (!ok) return;
+    const { error } = await supabase.from('reservas_diretas').delete().eq('id', id);
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+    carregarDiretas();
+  }
+
+  async function abrirModalNovaDireta() {
+    const corpo = document.getElementById('template-direta').content.cloneNode(true);
+    abrirModal({ titulo: 'Nova reserva direta', corpoEl: corpo, largura: 'max-w-lg' });
+    await preencherSelectImoveis(document.getElementById('dr-imovel'));
+    document.getElementById('form-direta').addEventListener('submit', salvarDireta);
+  }
+
+  async function salvarDireta(e) {
+    e.preventDefault();
+    const payload = {
+      imovel_id: document.getElementById('dr-imovel').value,
+      hospede: document.getElementById('dr-hospede').value.trim(),
+      periodo_inicio: document.getElementById('dr-inicio').value || null,
+      periodo_fim: document.getElementById('dr-fim').value || null,
+      valor_contrato: Number(document.getElementById('dr-valor').value || 0),
+      valor_adiantado: Number(document.getElementById('dr-adiantado').value || 0),
+      status: document.getElementById('dr-status').value,
+    };
+
+    const { error } = await supabase.from('reservas_diretas').insert(payload);
+    if (error) { await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' }); return; }
+    carregarDiretas();
+  }
+
+  document.getElementById('btn-nova-direta').addEventListener('click', abrirModalNovaDireta);
+
+  // ----------------------- Inicialização -----------------------
+  await inicializarFiltros();
+  carregarReservas();
+  carregarDiretas();
+</script>
+</body>
+</html>

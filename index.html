@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TR Serviços de Reservas — Acesso</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body class="min-h-screen flex items-center justify-center px-4 py-10 tr-bg-azul">
+
+  <main class="w-full max-w-sm">
+
+    <div class="flex flex-col items-center mb-8">
+      <div class="tr-logo-ring rounded-xl w-20 h-20 flex items-center justify-center mb-3">
+        <span class="text-3xl font-extrabold tracking-tight">
+          <span style="color: var(--tr-verde)">T</span><span style="color: var(--tr-branco)">R</span>
+        </span>
+      </div>
+      <p class="text-white/80 text-xs tracking-wide">Serviços de Reservas</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+      <h1 class="text-lg font-bold text-slate-900 mb-1">Entrar</h1>
+      <p class="text-sm text-slate-500 mb-6">Acesse com seu e-mail cadastrado.</p>
+
+      <form id="form-login" class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-medium text-slate-700 mb-1">E-mail</label>
+          <input id="email" type="email" required autocomplete="email"
+            class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400"
+            placeholder="voce@exemplo.com">
+        </div>
+
+        <div>
+          <label for="senha" class="block text-sm font-medium text-slate-700 mb-1">Senha</label>
+          <input id="senha" type="password" required autocomplete="current-password"
+            class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400"
+            placeholder="••••••••">
+        </div>
+
+        <p id="erro" class="hidden text-sm text-red-600"></p>
+
+        <button id="btn-entrar" type="submit"
+          class="tr-btn w-full rounded-lg py-2.5 text-sm font-semibold transition-colors disabled:opacity-60">
+          Entrar
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-xs text-white/60 mt-6">
+      TR Serviços de Reservas Turísticas LTDA
+    </p>
+  </main>
+
+<script type="module">
+  import { supabase } from './assets/js/supabaseClient.js';
+
+  // Já logado? pula direto para o app.
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) window.location.href = 'app/dashboard.html';
+
+  const form = document.getElementById('form-login');
+  const btn = document.getElementById('btn-entrar');
+  const erro = document.getElementById('erro');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    erro.classList.add('hidden');
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('senha').value;
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
+
+    if (error) {
+      erro.textContent = 'E-mail ou senha inválidos.';
+      erro.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = 'Entrar';
+      return;
+    }
+
+    window.location.href = 'app/dashboard.html';
+  });
+</script>
+</body>
+</html>

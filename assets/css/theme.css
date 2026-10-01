@@ -1,0 +1,60 @@
+/* =====================================================================
+   TR Serviços de Reservas — tema compartilhado
+   Carregado em toda página, depois do Tailwind CDN.
+   ===================================================================== */
+:root {
+  --tr-azul: #004AAD;
+  --tr-azul-escuro: #003a87;
+  --tr-verde: #7ED956;
+  --tr-verde-escuro: #63b741;
+  --tr-branco: #FFFFFF;
+  --tr-cinza-texto: #1e293b;
+}
+
+html, body { height: 100%; }
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.tr-bg-azul      { background: var(--tr-azul); }
+.tr-bg-verde     { background: var(--tr-verde); }
+.tr-text-azul    { color: var(--tr-azul); }
+
+.tr-btn {
+  background: var(--tr-verde);
+  color: #0b2e05;
+}
+.tr-btn:hover { background: var(--tr-verde-escuro); }
+
+.tr-input:focus {
+  outline: 2px solid var(--tr-verde);
+  outline-offset: 1px;
+}
+
+.tr-logo-ring { border: 3px solid var(--tr-branco); }
+
+/* Navegação lateral do /app — ativa no item da página atual */
+.tr-nav-item { color: #cbd5e1; }
+.tr-nav-item.ativo, .tr-nav-item:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--tr-branco);
+}
+
+/* Abas de um editor em modal (ex.: Imóveis — Detalhes/Inventário/Acesso/Regras).
+   Horizontal no mobile (borda embaixo), lateral a partir de sm (borda à esquerda). */
+.tr-tab-btn {
+  color: #64748b; /* slate-500 */
+  border-color: transparent;
+}
+.tr-tab-btn.ativo {
+  color: var(--tr-azul);
+  font-weight: 600;
+  background: #fff;
+  border-color: var(--tr-azul);
+}
+.tr-tab-btn:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
