@@ -4,6 +4,7 @@
    ===================================================================== */
 :root {
   --tr-azul: #004AAD;
+  --tr-azul-claro: #1f63c9;
   --tr-azul-escuro: #003a87;
   --tr-verde: #7ED956;
   --tr-verde-escuro: #63b741;
@@ -16,38 +17,76 @@ body {
   font-family: 'Manrope', system-ui, sans-serif;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  -webkit-font-smoothing: antialiased;
 }
 
-.tr-bg-azul      { background: var(--tr-azul); }
+/* Fundo com leve gradiente — menos chapado que uma cor sólida */
+.tr-bg-azul {
+  background: linear-gradient(165deg, var(--tr-azul-claro) 0%, var(--tr-azul) 45%, var(--tr-azul-escuro) 100%);
+}
 .tr-bg-verde     { background: var(--tr-verde); }
 .tr-text-azul    { color: var(--tr-azul); }
 
 .tr-btn {
   background: var(--tr-verde);
   color: #0b2e05;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.06);
+  transition: background-color .15s ease, box-shadow .15s ease, transform .1s ease;
 }
-.tr-btn:hover { background: var(--tr-verde-escuro); }
+.tr-btn:hover  { background: var(--tr-verde-escuro); box-shadow: 0 6px 14px -4px rgba(99,183,65,0.5); transform: translateY(-1px); }
+.tr-btn:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(15,23,42,0.08); }
+.tr-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; box-shadow: none; }
 
+.tr-input {
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
 .tr-input:focus {
-  outline: 2px solid var(--tr-verde);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--tr-verde);
+  box-shadow: 0 0 0 3px rgba(126,217,86,0.28);
 }
 
 .tr-logo-ring { border: 3px solid var(--tr-branco); }
 
+/* Cartão padrão das listas/seções — substitui "bg-white rounded-xl border
+   border-slate-200" repetido em toda tela, com sombra suave e leve elevação
+   ao passar o mouse (sensação menos "chapada"). */
+.tr-card {
+  background: #fff;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 1px 1px rgba(15,23,42,0.03);
+  transition: box-shadow .2s ease;
+}
+.tr-card:hover { box-shadow: 0 8px 20px -8px rgba(15,23,42,0.12); }
+
+/* Linha de tabela com leve destaque ao passar o mouse */
+.tr-row {
+  transition: background-color .12s ease;
+}
+.tr-row:hover { background: #f8fafc; } /* slate-50 */
+
 /* Navegação lateral do /app — ativa no item da página atual */
-.tr-nav-item { color: #cbd5e1; }
+.tr-nav-item {
+  color: #cbd5e1;
+  transition: background-color .15s ease, color .15s ease;
+  position: relative;
+}
 .tr-nav-item.ativo, .tr-nav-item:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.12);
   color: var(--tr-branco);
 }
+.tr-nav-item.ativo { box-shadow: inset 3px 0 0 0 var(--tr-verde); }
+.tr-nav-item svg { flex-shrink: 0; }
 
-/* Abas de um editor em modal (ex.: Imóveis — Detalhes/Inventário/Acesso/Regras).
-   Horizontal no mobile (borda embaixo), lateral a partir de sm (borda à esquerda). */
+/* Abas de um editor (ex.: Imóveis, Financeiro). Horizontal no mobile
+   (borda embaixo), lateral a partir de sm (borda à esquerda). */
 .tr-tab-btn {
   color: #64748b; /* slate-500 */
   border-color: transparent;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
 }
+.tr-tab-btn:hover:not(.ativo):not(:disabled) { color: var(--tr-azul); background: #fff; }
 .tr-tab-btn.ativo {
   color: var(--tr-azul);
   font-weight: 600;

@@ -107,6 +107,67 @@ export function mostrarAlerta(mensagem, { titulo = 'Aviso' } = {}) {
   });
 }
 
+/**
+ * Modal de "ficha" somente-leitura — visual rico, sem campos editáveis.
+ *
+ * @param {object} opcoes
+ * @param {string}  opcoes.titulo
+ * @param {string}  [opcoes.subtitulo]     — linha menor abaixo do título
+ * @param {string}  [opcoes.badge]         — texto do badge (ex.: "2 noites")
+ * @param {string}  [opcoes.badgeCor]      — 'blue'|'green'|'amber'|'slate' (padrão: 'slate')
+ * @param {string}  [opcoes.destaque]      — bloco HTML destacado (ex.: prévia de cálculo)
+ * @param {Array<{secao?:string, campos:Array<{label,valor,html?}>}>} opcoes.secoes
+ *   Cada item pode ser uma seção com título próprio e lista de campos.
+ *   `campos` também pode ser passado diretamente no nível raiz (compatível com uso antigo).
+ * @param {Array<{label,valor,html?}>} [opcoes.campos]  — atalho: uma única seção sem título
+ * @param {string}  [opcoes.largura]
+ */
+export function exibirDetalhes({ titulo, subtitulo, badge, badgeCor = 'slate', destaque, secoes, campos, largura = 'max-w-lg' }) {
+  // Compatibilidade: campos no nível raiz → transforma numa seção sem título
+  const listaSecoes = secoes || (campos ? [{ campos }] : []);
+
+  const corBadge = {
+    blue:  'bg-blue-50 text-blue-700',
+    green: 'bg-emerald-50 text-emerald-700',
+    amber: 'bg-amber-50 text-amber-700',
+    slate: 'bg-slate-100 text-slate-600',
+  }[badgeCor] || 'bg-slate-100 text-slate-600';
+
+  function renderCampo(c) {
+    if (c.html) return `<div class="sm:col-span-2">${c.html}</div>`;
+    const val = (c.valor != null && c.valor !== '') ? escapeHtml(String(c.valor)) : '—';
+    const span = c.span2 ? 'sm:col-span-2' : '';
+    return `<div class="${span}">
+      <dt class="text-[11px] font-medium uppercase tracking-wide text-slate-400 mb-0.5">${escapeHtml(c.label)}</dt>
+      <dd class="text-slate-800 font-medium break-words text-sm">${val}</dd>
+    </div>`;
+  }
+
+  const secaoHtml = listaSecoes.map((s) => `
+    ${s.secao ? `<p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mt-4 mb-2">${escapeHtml(s.secao)}</p>` : ''}
+    <dl class="grid grid-cols-2 gap-x-6 gap-y-3">${s.campos.map(renderCampo).join('')}</dl>
+  `).join('<div class="border-t border-slate-100 my-3"></div>');
+
+  const corpoHtml = `
+    <div class="space-y-1">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          ${subtitulo ? `<p class="text-xs text-slate-500 mb-0.5">${escapeHtml(subtitulo)}</p>` : ''}
+        </div>
+        ${badge ? `<span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${corBadge}">${escapeHtml(badge)}</span>` : ''}
+      </div>
+      ${destaque ? `<div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm">${destaque}</div>` : ''}
+      ${secaoHtml}
+    </div>`;
+
+  abrirModal({
+    titulo,
+    corpoHtml,
+    largura,
+    botoes: [{ texto: 'Fechar', classe: 'bg-slate-100 text-slate-700 hover:bg-slate-200', acao: fecharModal }],
+  });
+}
+
 /** Substitui window.confirm(). Resolve true/false. */
 export function confirmarAcao(mensagem, { titulo = 'Confirmar', textoConfirmar = 'Confirmar', textoCancelar = 'Cancelar', perigo = false } = {}) {
   return new Promise((resolve) => {

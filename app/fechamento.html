@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fechamento Mensal — TR Serviços de Reservas</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/logo.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+<body class="min-h-screen bg-slate-50">
+
+  <div class="flex flex-col sm:flex-row min-h-screen">
+
+    <header class="sm:hidden flex items-center justify-between px-4 py-3 tr-bg-azul text-white sticky top-0 z-20">
+      <button id="btn-menu-abrir" aria-label="Abrir menu" aria-expanded="false" class="p-1 -ml-1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="tr-logo-ring rounded-md w-7 h-7 flex items-center justify-center">
+          <span class="text-xs font-extrabold"><span style="color: var(--tr-verde)">T</span><span class="text-white">R</span></span>
+        </div>
+        <span class="text-sm font-semibold">TR Reservas</span>
+      </div>
+      <span class="w-6" aria-hidden="true"></span>
+    </header>
+
+    <div id="sidebar-overlay" class="hidden sm:hidden fixed inset-0 bg-black/40 z-30"></div>
+
+    <aside id="sidebar"
+      class="fixed sm:static inset-y-0 left-0 z-40 w-64 sm:w-56 shrink-0 tr-bg-azul text-white flex flex-col -translate-x-full sm:translate-x-0 transition-transform duration-200">
+      <div class="flex items-center justify-between gap-2 px-4 py-4">
+        <div class="flex items-center gap-2">
+          <div class="tr-logo-ring rounded-md w-8 h-8 flex items-center justify-center shrink-0">
+            <span class="text-sm font-extrabold">
+              <span style="color: var(--tr-verde)">T</span><span class="text-white">R</span>
+            </span>
+          </div>
+          <span class="text-sm font-semibold">TR Reservas</span>
+        </div>
+        <button id="btn-menu-fechar" aria-label="Fechar menu" class="sm:hidden p-1 text-white/80 hover:text-white">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 px-2 space-y-1 text-sm">
+        <a href="dashboard.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></a>
+        <a href="reservas.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Reservas</span></a>
+        <a href="imoveis.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg><span>Imóveis</span></a>
+        <a href="proprietarios.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Proprietários</span></a>
+        <a href="financeiro.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg><span>Financeiro</span></a>
+        <a href="fechamento.html" class="tr-nav-item ativo flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg><span>Fechamento</span></a>
+        <a href="relatorios.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/></svg><span>Relatórios</span></a>
+        <a href="parametros.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>Parâmetros</span></a>
+      </nav>
+
+      <div class="px-4 py-4 border-t border-white/10">
+        <p id="usuario-nome" class="text-xs text-white/70 mb-2">—</p>
+        <button id="btn-sair" class="text-xs text-white/70 hover:text-white underline">Sair</button>
+      </div>
+    </aside>
+
+    <main class="flex-1 p-4 sm:p-6 min-w-0">
+     <div class="max-w-2xl mx-auto">
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-1">
+        <h1 class="text-xl font-bold text-slate-900">Fechamento Mensal</h1>
+        <input id="fch-mes" type="month" class="tr-input rounded-lg border border-slate-300 px-3 py-2 text-sm">
+      </div>
+      <p class="text-sm text-slate-500 mb-6">Entrada TR, despesas e distribuição de lucro entre os sócios.</p>
+
+      <div id="status-mes" class="mb-4"></div>
+
+      <section class="tr-card mb-6">
+        <div class="px-5 py-4 grid grid-cols-2 gap-4 border-b border-slate-200">
+          <div>
+            <p class="text-xs text-slate-400">Entrada TR</p>
+            <p id="val-entrada" class="text-lg font-semibold text-slate-900">—</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">Despesas</p>
+            <p id="val-despesas" class="text-lg font-semibold text-slate-900">—</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">Lucro bruto</p>
+            <p id="val-lucro-bruto" class="text-lg font-semibold text-slate-900">—</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">Lucro líquido (após deduções)</p>
+            <p id="val-lucro-liquido" class="text-lg font-semibold tr-text-azul">—</p>
+          </div>
+        </div>
+
+        <div class="px-5 py-4">
+          <h3 class="text-sm font-semibold text-slate-900 mb-2">Distribuição de lucro</h3>
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-slate-500 border-b border-slate-200">
+                <th class="py-2 font-medium">Participante</th>
+                <th class="py-2 font-medium text-right">Valor</th>
+                <th class="py-2 font-medium">Deduz do lucro?</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-distribuicao"></tbody>
+          </table>
+          <p id="distribuicao-vazio" class="hidden text-sm text-slate-400 py-3">Nenhum participante cadastrado em Parâmetros.</p>
+        </div>
+
+        <div class="px-5 py-4 border-t border-slate-200 flex justify-end gap-2">
+          <button id="btn-reabrir" class="hidden rounded-lg px-4 py-2 text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Reabrir mês</button>
+          <button id="btn-fechar" class="tr-btn rounded-lg px-4 py-2 text-sm font-semibold">Fechar mês</button>
+        </div>
+      </section>
+
+     </div>
+    </main>
+  </div>
+
+<script type="module">
+  import { exigirSessao, exigirPerfil, sair, aplicarVisibilidadePorPerfil } from '../assets/js/auth-guard.js';
+  import { initSidebarMobile } from '../assets/js/sidebar.js';
+  import { supabase } from '../assets/js/supabaseClient.js';
+  import { abrirModal, mostrarAlerta, confirmarAcao } from '../assets/js/modal.js';
+  import { calcularFechamentoMensal, obterFechamentoDoMes } from '../assets/js/calculo.js';
+  import { registrarLog } from '../assets/js/log.js';
+
+  initSidebarMobile();
+
+  const { usuario, nome, perfil } = await exigirSessao();
+  exigirPerfil(perfil, ['gestor', 'administrador']);
+
+  document.getElementById('usuario-nome').textContent = `${nome} · ${perfil}`;
+  aplicarVisibilidadePorPerfil(perfil);
+  document.getElementById('btn-sair').addEventListener('click', sair);
+
+  const fmtMoeda = (v) => (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const fmtPercentual = (v) => v == null ? null : `${(v * 100).toFixed(2).replace(/\.?0+$/, '')}%`;
+  const mesAtual = () => new Date().toISOString().slice(0, 7);
+  const mesParaReferencia = (mesInput) => `${mesInput}-01`;
+
+  function renderizarValores({ entradaTR, despesas, lucroBruto, distribuicao, lucroLiquido }) {
+    document.getElementById('val-entrada').textContent = fmtMoeda(entradaTR);
+    document.getElementById('val-despesas').textContent = fmtMoeda(despesas);
+    document.getElementById('val-lucro-bruto').textContent = fmtMoeda(lucroBruto);
+    document.getElementById('val-lucro-liquido').textContent = fmtMoeda(lucroLiquido);
+
+    const tbody = document.getElementById('tbody-distribuicao');
+    tbody.innerHTML = '';
+    document.getElementById('distribuicao-vazio').classList.toggle('hidden', (distribuicao || []).length > 0);
+    (distribuicao || []).forEach((p) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row';
+      tr.innerHTML = `
+        <td class="py-2">${p.nome}</td>
+        <td class="py-2 text-right font-medium">${fmtMoeda(p.valor)}</td>
+        <td class="py-2 text-slate-500">${p.deduzDoLucro ? 'Sim' : 'Não'}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function carregarMes() {
+    const mes = document.getElementById('fch-mes').value;
+    if (!mes) return;
+    const mesReferencia = mesParaReferencia(mes);
+
+    const fechamento = await obterFechamentoDoMes(mesReferencia);
+    const statusEl = document.getElementById('status-mes');
+    const btnFechar = document.getElementById('btn-fechar');
+    const btnReabrir = document.getElementById('btn-reabrir');
+
+    if (fechamento && fechamento.bloqueado) {
+      statusEl.innerHTML = `<span class="text-xs text-green-700 bg-green-50 rounded px-2 py-1">
+        Fechado em ${new Date(fechamento.fechado_em).toLocaleDateString('pt-BR')} — valores congelados nesta data.
+      </span>`;
+      renderizarValores({
+        entradaTR: fechamento.entrada_tr,
+        despesas: fechamento.despesas,
+        lucroBruto: fechamento.entrada_tr - fechamento.despesas,
+        distribuicao: fechamento.distribuicao_lucro,
+        lucroLiquido: fechamento.lucro_liquido,
+      });
+      btnFechar.classList.add('hidden');
+      btnReabrir.classList.remove('hidden');
+    } else {
+      statusEl.innerHTML = `<span class="text-xs text-amber-700 bg-amber-50 rounded px-2 py-1">
+        Mês aberto — valores calculados ao vivo a partir dos lançamentos atuais.
+      </span>`;
+      const calculo = await calcularFechamentoMensal(mesReferencia);
+      renderizarValores(calculo);
+      btnFechar.classList.remove('hidden');
+      btnReabrir.classList.add('hidden');
+    }
+  }
+
+  document.getElementById('fch-mes').addEventListener('change', carregarMes);
+
+  document.getElementById('btn-fechar').addEventListener('click', async () => {
+    const mes = document.getElementById('fch-mes').value;
+    const mesReferencia = mesParaReferencia(mes);
+
+    const ok = await confirmarAcao(
+      'Fechar este mês congela os valores de Entrada TR, Despesas e distribuição de lucro. Se algo for lançado depois com data retroativa, o sistema vai avisar e perguntar antes de alterar esse fechamento.',
+      { titulo: 'Fechar mês', textoConfirmar: 'Fechar mês' }
+    );
+    if (!ok) return;
+
+    const calculo = await calcularFechamentoMensal(mesReferencia);
+    const existente = await obterFechamentoDoMes(mesReferencia);
+
+    const payload = {
+      mes_referencia: mesReferencia,
+      entrada_tr: calculo.entradaTR,
+      despesas: calculo.despesas,
+      distribuicao_lucro: calculo.distribuicao,
+      lucro_liquido: calculo.lucroLiquido,
+      bloqueado: true,
+      fechado_por: usuario.id,
+      fechado_em: new Date().toISOString(),
+    };
+
+    const { error } = existente
+      ? await supabase.from('fechamentos_mensais').update(payload).eq('id', existente.id)
+      : await supabase.from('fechamentos_mensais').insert(payload);
+
+    if (error) { await mostrarAlerta('Erro ao fechar o mês: ' + error.message, { titulo: 'Erro' }); return; }
+    await registrarLog({
+      acao: existente ? 'editar' : 'criar', tabela: 'fechamentos_mensais', registroId: existente?.id,
+      descricao: `Mês ${mes} fechado — lucro líquido ${calculo.lucroLiquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`,
+    });
+    await mostrarAlerta('Mês fechado com sucesso.', { titulo: 'Pronto' });
+    carregarMes();
+  });
+
+  document.getElementById('btn-reabrir').addEventListener('click', async () => {
+    const mes = document.getElementById('fch-mes').value;
+    const mesReferencia = mesParaReferencia(mes);
+
+    const ok = await confirmarAcao(
+      'Reabrir o mês volta o cálculo para o modo "ao vivo" (recalcula sozinho a cada lançamento), até você fechá-lo de novo.',
+      { titulo: 'Reabrir mês', textoConfirmar: 'Reabrir' }
+    );
+    if (!ok) return;
+
+    const existente = await obterFechamentoDoMes(mesReferencia);
+    if (existente) {
+      const { error } = await supabase.from('fechamentos_mensais').update({ bloqueado: false }).eq('id', existente.id);
+      if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+      await registrarLog({ acao: 'editar', tabela: 'fechamentos_mensais', registroId: existente.id, descricao: `Mês ${mes} reaberto` });
+    }
+    carregarMes();
+  });
+
+  document.getElementById('fch-mes').value = mesAtual();
+  carregarMes();
+</script>
+</body>
+</html>

@@ -299,6 +299,32 @@ create table public.fechamentos_mensais (
   fechado_em          timestamptz
 );
 
+-- ---------------------------------------------------------------------
+-- 7b. ESTOQUE (itens de reposição — lençóis, produtos de limpeza etc.)
+-- ---------------------------------------------------------------------
+create table public.estoque (
+  id                uuid primary key default gen_random_uuid(),
+  data_compra       date not null,
+  item              text not null,
+  quantidade        numeric(12,2) not null,
+  quantidade_atual  numeric(12,2) not null,
+  valor_unitario    numeric(12,2),
+  criado_em         timestamptz not null default now()
+);
+
+-- ---------------------------------------------------------------------
+-- 8. LOG DE ATIVIDADES (auditoria de criar/editar/excluir)
+-- ---------------------------------------------------------------------
+create table public.logs_atividade (
+  id           uuid primary key default gen_random_uuid(),
+  usuario_id   uuid references public.usuarios(id),
+  acao         text not null,   -- 'criar' | 'editar' | 'excluir'
+  tabela       text not null,   -- nome da tabela afetada, ex. 'reservas'
+  registro_id  uuid,            -- id do registro afetado (quando aplicável)
+  descricao    text,            -- resumo legível, ex. "Reserva de João em Barra I"
+  criado_em    timestamptz not null default now()
+);
+
 -- =====================================================================
 -- ROW LEVEL SECURITY
 -- =====================================================================
@@ -330,10 +356,12 @@ alter table public.pagamentos_pessoal      enable row level security;
 alter table public.repasses                enable row level security;
 alter table public.notas_fiscais           enable row level security;
 alter table public.fechamentos_mensais     enable row level security;
+alter table public.estoque                 enable row level security;
+alter table public.logs_atividade          enable row level security;
 
 -- usuarios: todo mundo autenticado vê a própria linha; gestor vê todas
 create policy usuarios_select on public.usuarios for select
-  using (id = auth.uid() or public.meu_perfil() = 'gestor');
+  using (id = auth.uid() or public.meu_perfil() in ('gestor', 'administrador'));
 create policy usuarios_gestor_all on public.usuarios for all
   using (public.meu_perfil() = 'gestor');
 
@@ -384,6 +412,18 @@ create policy repasses_admin on public.repasses for all
 create policy notas_fiscais_admin on public.notas_fiscais for all
   using (public.meu_perfil() in ('gestor', 'administrador'));
 create policy fechamentos_admin on public.fechamentos_mensais for all
+  using (public.meu_perfil() in ('gestor', 'administrador'));
+
+-- Estoque: mesmo nível de acesso operacional de despesas/manutenções
+-- (vive dentro de Financeiro, hoje restrito a Gestor/Administrador na UI).
+create policy estoque_operacional on public.estoque for all
+  using (public.meu_perfil() in ('gestor', 'administrador', 'operador'));
+
+-- Log de atividades: qualquer perfil autenticado pode registrar a própria
+-- ação; só Gestor/Administrador podem ler o histórico (painel de auditoria).
+create policy logs_insercao on public.logs_atividade for insert
+  with check (usuario_id = auth.uid());
+create policy logs_leitura on public.logs_atividade for select
   using (public.meu_perfil() in ('gestor', 'administrador'));
 
 -- =====================================================================

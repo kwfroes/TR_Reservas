@@ -14,7 +14,7 @@
 
   <div class="flex flex-col sm:flex-row min-h-screen">
 
-    <!-- Barra superior (só mobile) -->
+    <!-- Barra superior mobile -->
     <header class="sm:hidden flex items-center justify-between px-4 py-3 tr-bg-azul text-white sticky top-0 z-20">
       <button id="btn-menu-abrir" aria-label="Abrir menu" aria-expanded="false" class="p-1 -ml-1">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
@@ -23,15 +23,14 @@
         <div class="tr-logo-ring rounded-md w-7 h-7 flex items-center justify-center">
           <span class="text-xs font-extrabold"><span style="color: var(--tr-verde)">T</span><span class="text-white">R</span></span>
         </div>
-        <span class="text-sm font-semibold">TR Reservas</span>
+        <span class="text-sm font-semibold">TR BRAZIL HOST</span>
       </div>
       <span class="w-6" aria-hidden="true"></span>
     </header>
 
-    <!-- Fundo escurecido atrás do menu aberto (só mobile) -->
     <div id="sidebar-overlay" class="hidden sm:hidden fixed inset-0 bg-black/40 z-30"></div>
 
-    <!-- Menu lateral: off-canvas em mobile, fixo a partir de sm -->
+    <!-- Menu lateral -->
     <aside id="sidebar"
       class="fixed sm:static inset-y-0 left-0 z-40 w-64 sm:w-56 shrink-0 tr-bg-azul text-white flex flex-col -translate-x-full sm:translate-x-0 transition-transform duration-200">
       <div class="flex items-center justify-between gap-2 px-4 py-4">
@@ -41,7 +40,7 @@
               <span style="color: var(--tr-verde)">T</span><span class="text-white">R</span>
             </span>
           </div>
-          <span class="text-sm font-semibold">TR Reservas</span>
+          <span class="text-sm font-semibold">TR BRAZIL HOST</span>
         </div>
         <button id="btn-menu-fechar" aria-label="Fechar menu" class="sm:hidden p-1 text-white/80 hover:text-white">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
@@ -49,13 +48,14 @@
       </div>
 
       <nav class="flex-1 px-2 space-y-1 text-sm">
-        <a href="dashboard.html" class="tr-nav-item ativo block rounded-lg px-3 py-2">Dashboard</a>
-        <a href="reservas.html" class="tr-nav-item block rounded-lg px-3 py-2">Reservas</a>
-        <a href="imoveis.html" class="tr-nav-item block rounded-lg px-3 py-2">Imóveis</a>
-        <a href="proprietarios.html" class="tr-nav-item block rounded-lg px-3 py-2">Proprietários</a>
-        <a href="financeiro.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor,administrador">Financeiro</a>
-        <a href="relatorios.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor,administrador">Relatórios</a>
-        <a href="parametros.html" class="tr-nav-item block rounded-lg px-3 py-2" data-perfil="gestor">Parâmetros</a>
+        <a href="dashboard.html" class="tr-nav-item ativo flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></a>
+        <a href="reservas.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Reservas</span></a>
+        <a href="imoveis.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg><span>Imóveis</span></a>
+        <a href="proprietarios.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Proprietários</span></a>
+        <a href="financeiro.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg><span>Financeiro</span></a>
+        <a href="fechamento.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg><span>Fechamento</span></a>
+        <a href="relatorios.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/></svg><span>Relatórios</span></a>
+        <a href="parametros.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>Parâmetros</span></a>
       </nav>
 
       <div class="px-4 py-4 border-t border-white/10">
@@ -64,15 +64,192 @@
       </div>
     </aside>
 
-    <!-- Conteúdo -->
+    <!-- Conteúdo principal -->
     <main class="flex-1 p-4 sm:p-6 min-w-0">
-      <div class="max-w-5xl mx-auto">
-        <h1 class="text-xl font-bold text-slate-900 mb-1">Dashboard</h1>
-        <p id="boas-vindas" class="text-sm text-slate-500 mb-6">Carregando...</p>
+      <div class="max-w-6xl mx-auto space-y-6">
 
-        <div class="bg-white rounded-xl border border-slate-200 p-6 text-sm text-slate-500">
-          Indicadores da Etapa 8 entram aqui (ocupação, bruto/líquido/repasse, ranking).
+        <!-- Topo e Filtros (RF30) -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h1 class="text-xl font-bold text-slate-900">Dashboard</h1>
+            <p id="periodo-descricao" class="text-sm text-slate-500">Consolidado operacional e financeiro.</p>
+          </div>
+
+          <!-- Barra de Filtros: Mês / Ano / Imóvel -->
+          <div class="flex flex-wrap items-center gap-2 bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
+            <select id="filtro-mes" class="tr-input rounded-lg border border-slate-300 px-3 py-1.5 text-sm bg-white font-medium text-slate-700">
+              <option value="todos">Ano Inteiro (Todos os meses)</option>
+              <option value="1">Janeiro</option>
+              <option value="2">Fevereiro</option>
+              <option value="3">Março</option>
+              <option value="4">Abril</option>
+              <option value="5">Maio</option>
+              <option value="6">Junho</option>
+              <option value="7">Julho</option>
+              <option value="8">Agosto</option>
+              <option value="9">Setembro</option>
+              <option value="10">Outubro</option>
+              <option value="11">Novembro</option>
+              <option value="12">Dezembro</option>
+            </select>
+
+            <select id="filtro-ano" class="tr-input rounded-lg border border-slate-300 px-3 py-1.5 text-sm bg-white font-medium text-slate-700"></select>
+
+            <select id="filtro-imovel" class="tr-input rounded-lg border border-slate-300 px-3 py-1.5 text-sm bg-white font-medium text-slate-700 max-w-[180px] sm:max-w-xs">
+              <option value="">Todos os imóveis</option>
+            </select>
+
+            <button id="btn-mes-atual" title="Ir para o mês atual" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">
+              Hoje
+            </button>
+          </div>
         </div>
+
+        <div id="aviso-inconsistencia" class="hidden p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800"></div>
+
+        <!-- Indicadores Operacionais Gerais (RF26, RF27, RF29) -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="tr-card p-4">
+            <p class="text-xs font-medium text-slate-400 mb-1">Faturamento Bruto</p>
+            <p id="kpi-bruto" class="text-xl font-bold text-slate-900">—</p>
+            <p class="text-[11px] text-slate-400 mt-1">Diárias competência + Limpeza checkout</p>
+          </div>
+
+          <div class="tr-card p-4">
+            <p class="text-xs font-medium text-slate-400 mb-1">Taxa de Ocupação</p>
+            <p id="kpi-ocupacao" class="text-xl font-bold text-slate-900">—</p>
+            <p id="kpi-noites-detalhe" class="text-[11px] text-slate-400 mt-1">— noites ocupadas</p>
+          </div>
+
+          <div class="tr-card p-4">
+            <p class="text-xs font-medium text-slate-400 mb-1">Total de Reservas</p>
+            <p id="kpi-reservas-qtd" class="text-xl font-bold text-slate-900">—</p>
+            <p id="kpi-diarias-media" class="text-[11px] text-slate-400 mt-1">Média diária: —</p>
+          </div>
+
+          <div class="tr-card p-4">
+            <p class="text-xs font-medium text-slate-400 mb-1">Total de Limpeza</p>
+            <p id="kpi-limpeza" class="text-xl font-bold text-slate-900">—</p>
+            <p class="text-[11px] text-slate-400 mt-1">Taxas reconhecidas no check-out</p>
+          </div>
+        </section>
+
+        <!-- Indicadores Financeiros Restritos (Gestor e Administrador) -->
+        <section data-perfil="gestor,administrador" class="space-y-2">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 ml-1">Financeiro da TR (Visão Gerencial)</h2>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="tr-card p-4 border-l-4 border-l-blue-600">
+              <p class="text-xs font-medium text-slate-400 mb-1">Receita TR (Comissão Líquida)</p>
+              <p id="kpi-comissao" class="text-xl font-bold tr-text-azul">—</p>
+              <p class="text-[11px] text-slate-400 mt-1">Entrada por competência</p>
+            </div>
+
+            <div class="tr-card p-4 border-l-4 border-l-emerald-600">
+              <p class="text-xs font-medium text-slate-400 mb-1">Repasses a Proprietários</p>
+              <p id="kpi-repasse" class="text-xl font-bold text-emerald-700">—</p>
+              <p id="kpi-deducoes-detalhe" class="text-[11px] text-slate-400 mt-1">Líquido de deduções</p>
+            </div>
+
+            <div class="tr-card p-4 border-l-4 border-l-amber-500">
+              <p class="text-xs font-medium text-slate-400 mb-1">Despesas da TR</p>
+              <p id="kpi-despesas" class="text-xl font-bold text-amber-700">—</p>
+              <p id="kpi-despesas-detalhe" class="text-[11px] text-slate-400 mt-1">Parcelas + Manutenções TR</p>
+            </div>
+
+            <div class="tr-card p-4 border-l-4 border-l-green-600">
+              <p class="text-xs font-medium text-slate-400 mb-1">Lucro Operacional TR</p>
+              <p id="kpi-lucro" class="text-xl font-bold text-slate-900">—</p>
+              <p class="text-[11px] text-slate-400 mt-1">Receita TR − Despesas TR</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Evolução Mensal (Janeiro a Dezembro) - Exibida quando 'Ano Inteiro' está ativo -->
+        <section id="secao-evolucao-mensal" class="hidden tr-card overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm">Evolução Mensal (Janeiro a Dezembro)</h3>
+              <p class="text-xs text-slate-400">Desempenho distribuído por competência no ano</p>
+            </div>
+            <span class="text-xs bg-slate-100 text-slate-600 font-semibold px-2 py-1 rounded">Consolidado Anual</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-slate-400 border-b border-slate-100 bg-slate-50 text-xs">
+                  <th class="py-2.5 px-4 font-semibold">Mês</th>
+                  <th class="py-2.5 px-4 font-semibold text-center">Reservas</th>
+                  <th class="py-2.5 px-4 font-semibold text-center">Noites</th>
+                  <th class="py-2.5 px-4 font-semibold text-right">Bruto</th>
+                  <th class="py-2.5 px-4 font-semibold text-right" data-perfil="gestor,administrador">Entrada TR</th>
+                  <th class="py-2.5 px-4 font-semibold text-right" data-perfil="gestor,administrador">Repasse</th>
+                  <th class="py-2.5 px-4 font-semibold text-right" data-perfil="gestor,administrador">Despesas TR</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-evolucao-mensal"></tbody>
+              <tfoot id="tfoot-evolucao-mensal" class="bg-slate-50 font-bold border-t border-slate-200 text-xs"></tfoot>
+            </table>
+          </div>
+        </section>
+
+        <!-- Detalhamento por Imóvel e Ranking de Hóspedes -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- Tabela de Imóveis (Estrutura da planilha adaptada para RF26 e RF28) -->
+          <section class="tr-card overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Detalhamento por Imóvel</h3>
+                <p class="text-xs text-slate-400">Bruto, Líquido TR e Repasse no período selecionado</p>
+              </div>
+              <span class="text-xs bg-slate-100 text-slate-600 font-semibold px-2 py-1 rounded">Ranking Faturamento</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-slate-400 border-b border-slate-100 bg-slate-50 text-xs">
+                    <th class="py-2.5 px-3 font-semibold">#</th>
+                    <th class="py-2.5 px-3 font-semibold">Imóvel</th>
+                    <th class="py-2.5 px-3 font-semibold text-center">Ocup.</th>
+                    <th class="py-2.5 px-3 font-semibold text-center">Locações</th>
+                    <th class="py-2.5 px-3 font-semibold text-right">Bruto</th>
+                    <th class="py-2.5 px-3 font-semibold text-right" data-perfil="gestor,administrador">Líquido TR</th>
+                    <th class="py-2.5 px-3 font-semibold text-right" data-perfil="gestor,administrador">Repasse</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-ranking-imoveis"></tbody>
+              </table>
+              <p id="ranking-imoveis-vazio" class="hidden text-xs text-center text-slate-400 py-8">Nenhum movimento registrado no período.</p>
+            </div>
+          </section>
+
+          <!-- Ranking de Hóspedes (Top Clientes) -->
+          <section class="tr-card overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Top Hóspedes (Clientes)</h3>
+                <p class="text-xs text-slate-400">Principais geradores de receita no período</p>
+              </div>
+              <span class="text-xs bg-slate-100 text-slate-600 font-semibold px-2 py-1 rounded">Por valor pago</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-slate-400 border-b border-slate-100 bg-slate-50 text-xs">
+                    <th class="py-2.5 px-4 font-semibold">#</th>
+                    <th class="py-2.5 px-4 font-semibold">Hóspede</th>
+                    <th class="py-2.5 px-4 font-semibold text-center">Diárias</th>
+                    <th class="py-2.5 px-4 font-semibold text-right">Valor Gasto</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-ranking-hospedes"></tbody>
+              </table>
+              <p id="ranking-hospedes-vazio" class="hidden text-xs text-center text-slate-400 py-8">Nenhum hóspede registrado no período.</p>
+            </div>
+          </section>
+
+        </div>
+
       </div>
     </main>
   </div>
@@ -80,16 +257,596 @@
 <script type="module">
   import { exigirSessao, sair, aplicarVisibilidadePorPerfil } from '../assets/js/auth-guard.js';
   import { initSidebarMobile } from '../assets/js/sidebar.js';
+  import { supabase } from '../assets/js/supabaseClient.js';
+  import { mostrarAlerta } from '../assets/js/modal.js';
 
   initSidebarMobile();
 
   const { nome, perfil } = await exigirSessao();
+  const ehGestorOuAdmin = perfil === 'gestor' || perfil === 'administrador';
 
   document.getElementById('usuario-nome').textContent = `${nome} · ${perfil}`;
-  document.getElementById('boas-vindas').textContent = `Olá, ${nome.split(' ')[0]}.`;
   aplicarVisibilidadePorPerfil(perfil);
-
   document.getElementById('btn-sair').addEventListener('click', sair);
+
+  const fmtMoeda = (v) => (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const fmtPercentual = (v) => `${(v * 100).toFixed(1)}%`;
+  const mesmoMes = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
+  const NOMES_MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+  function escapeHtml(texto) {
+    if (!texto) return '';
+    return String(texto)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  let imoveisLista = [];
+
+  function popularAnos() {
+    const selAno = document.getElementById('filtro-ano');
+    const anoAtual = new Date().getFullYear();
+    selAno.innerHTML = '';
+    for (let a = anoAtual - 2; a <= anoAtual + 2; a++) {
+      const opt = document.createElement('option');
+      opt.value = a;
+      opt.textContent = a;
+      if (a === anoAtual) opt.selected = true;
+      selAno.appendChild(opt);
+    }
+  }
+
+  async function carregarImoveisFiltro() {
+    const { data, error } = await supabase
+      .from('imoveis')
+      .select('id, nome_referencia, codigo_interno, ativo')
+      .order('nome_referencia');
+
+    if (error) {
+      await mostrarAlerta('Erro ao carregar imóveis: ' + error.message, { titulo: 'Erro' });
+      return;
+    }
+
+    imoveisLista = data || [];
+    const select = document.getElementById('filtro-imovel');
+    select.innerHTML = '<option value="">Todos os imóveis</option>';
+    imoveisLista.forEach((im) => {
+      const opt = document.createElement('option');
+      opt.value = im.id;
+      opt.textContent = `${im.nome_referencia} (${im.codigo_interno})${im.ativo === false ? ' [Inativo]' : ''}`;
+      select.appendChild(opt);
+    });
+  }
+
+  function obterIntervaloPeriodo(ano, mesValor) {
+    if (mesValor === 'todos') {
+      const inicio = `${ano}-01-01`;
+      const fim = `${ano + 1}-01-01`;
+      const diasNoPeriodo = Math.round((new Date(fim + 'T00:00:00') - new Date(inicio + 'T00:00:00')) / 86400000);
+      return { inicio, fim, diasNoPeriodo, ehAnoInteiro: true };
+    }
+    const mesNum = Number(mesValor);
+    const inicio = `${ano}-${String(mesNum).padStart(2, '0')}-01`;
+    const fimAno = mesNum === 12 ? ano + 1 : ano;
+    const fimMes = mesNum === 12 ? 1 : mesNum + 1;
+    const fim = `${fimAno}-${String(fimMes).padStart(2, '0')}-01`;
+    const diasNoPeriodo = new Date(ano, mesNum, 0).getDate();
+    return { inicio, fim, diasNoPeriodo, ehAnoInteiro: false, mesNum };
+  }
+
+  async function atualizarDashboard() {
+    const mesValor = document.getElementById('filtro-mes').value;
+    const ano = Number(document.getElementById('filtro-ano').value);
+    const imovelId = document.getElementById('filtro-imovel').value;
+
+    const { inicio, fim, diasNoPeriodo, ehAnoInteiro, mesNum } = obterIntervaloPeriodo(ano, mesValor);
+    const dInicio = new Date(inicio + 'T00:00:00');
+    const dFim = new Date(fim + 'T00:00:00');
+
+    document.getElementById('periodo-descricao').textContent = ehAnoInteiro
+      ? `Consolidado anual de ${ano} (Janeiro a Dezembro)`
+      : `Consolidado de ${NOMES_MESES[mesNum - 1]} de ${ano}`;
+
+    // 1. Busca reservas do período
+    let queryReservas = supabase
+      .from('reservas')
+      .select('id, imovel_id, hospede, data_entrada, data_saida, valor_bruto, valor_limpeza, valor_comissao, valor_proprietario, imoveis!imovel_id(nome_referencia, codigo_interno)')
+      .lt('data_entrada', fim)
+      .gt('data_saida', inicio);
+
+    if (imovelId) queryReservas = queryReservas.eq('imovel_id', imovelId);
+
+    const { data: reservas, error: erroRes } = await queryReservas;
+    if (erroRes) {
+      await mostrarAlerta('Erro ao consultar reservas: ' + erroRes.message, { titulo: 'Erro' });
+      return;
+    }
+
+    // 2. Busca competências do período
+    const idsReservas = (reservas || []).map((r) => r.id);
+    let mapaCompetencias = new Map(); // chave: `${reserva_id}_${mes_referencia}`
+    if (idsReservas.length > 0) {
+      let queryComp = supabase
+        .from('reserva_competencias')
+        .select('reserva_id, mes_referencia, noites, valor_bruto_mes, valor_comissao_mes, valor_proprietario_mes')
+        .in('reserva_id', idsReservas);
+
+      if (ehAnoInteiro) {
+        queryComp = queryComp.gte('mes_referencia', inicio).lt('mes_referencia', fim);
+      } else {
+        queryComp = queryComp.eq('mes_referencia', inicio);
+      }
+
+      const { data: comps, error: erroComp } = await queryComp;
+      if (erroComp) {
+        await mostrarAlerta('Erro ao consultar competências: ' + erroComp.message, { titulo: 'Erro' });
+        return;
+      }
+      (comps || []).forEach((c) => {
+        mapaCompetencias.set(`${c.reserva_id}_${c.mes_referencia}`, c);
+      });
+    }
+
+    // 3. Manutenções cobradas do proprietário no período
+    let manutsPorImovelMap = new Map();
+    let totalDeducoesProprietario = 0;
+    let manutsPorMesMap = new Map(); // para a tabela de evolução mensal
+
+    let queryManut = supabase
+      .from('manutencoes')
+      .select('imovel_id, valor, data, cobrado_proprietario')
+      .gte('data', inicio)
+      .lt('data', fim);
+
+    if (imovelId) queryManut = queryManut.eq('imovel_id', imovelId);
+
+    const { data: todasManuts, error: erroManut } = await queryManut;
+    if (erroManut) {
+      await mostrarAlerta('Erro ao carregar manutenções: ' + erroManut.message, { titulo: 'Erro' });
+      return;
+    }
+
+    (todasManuts || []).forEach((m) => {
+      const v = Number(m.valor || 0);
+      const mesStr = m.data.slice(0, 7); // 'YYYY-MM'
+      if (!manutsPorMesMap.has(mesStr)) {
+        manutsPorMesMap.set(mesStr, { cobradoProp: 0, tr: 0 });
+      }
+      const itemM = manutsPorMesMap.get(mesStr);
+
+      if (m.cobrado_proprietario) {
+        totalDeducoesProprietario += v;
+        itemM.cobradoProp += v;
+        manutsPorImovelMap.set(m.imovel_id, (manutsPorImovelMap.get(m.imovel_id) || 0) + v);
+      } else {
+        itemM.tr += v;
+      }
+    });
+
+    // 4. Despesas da TR no período
+    let totalDespesasTR = 0;
+    let parcelasPorMesMap = new Map();
+
+    if (ehGestorOuAdmin) {
+      if (!imovelId) {
+        let queryParcelas = supabase
+          .from('despesa_parcelas')
+          .select('mes_referencia, valor_parcela');
+
+        if (ehAnoInteiro) {
+          queryParcelas = queryParcelas.gte('mes_referencia', inicio).lt('mes_referencia', fim);
+        } else {
+          queryParcelas = queryParcelas.eq('mes_referencia', inicio);
+        }
+
+        const { data: parcelas, error: erroParcelas } = await queryParcelas;
+        if (erroParcelas) {
+          await mostrarAlerta('Erro ao carregar despesas da TR: ' + erroParcelas.message, { titulo: 'Erro' });
+          return;
+        }
+
+        (parcelas || []).forEach((p) => {
+          const v = Number(p.valor_parcela || 0);
+          totalDespesasTR += v;
+          const mesStr = p.mes_referencia.slice(0, 7);
+          parcelasPorMesMap.set(mesStr, (parcelasPorMesMap.get(mesStr) || 0) + v);
+        });
+
+        const somaManutTR = (todasManuts || [])
+          .filter((m) => !m.cobrado_proprietario)
+          .reduce((acc, m) => acc + Number(m.valor || 0), 0);
+        totalDespesasTR += somaManutTR;
+      } else {
+        totalDespesasTR = (todasManuts || [])
+          .filter((m) => !m.cobrado_proprietario && m.imovel_id === imovelId)
+          .reduce((acc, m) => acc + Number(m.valor || 0), 0);
+      }
+    }
+
+    // 5. Consolidação de métricas por reserva
+    let totalNoitesOcupadas = 0;
+    let totalBruto = 0;
+    let totalLimpeza = 0;
+    let totalComissao = 0;
+    let totalRepasseDiarias = 0;
+
+    const rankingImoveisMap = new Map();
+    const rankingHospedesMap = new Map();
+    const evolucaoMensalMap = new Map(); // 'YYYY-MM' -> acumuladores
+    const alertasInconsistencia = [];
+
+    // Se for ano inteiro, inicializa os 12 meses
+    if (ehAnoInteiro) {
+      for (let m = 1; m <= 12; m++) {
+        const chaveMes = `${ano}-${String(m).padStart(2, '0')}`;
+        evolucaoMensalMap.set(chaveMes, {
+          mesIdx: m - 1,
+          reservas: 0,
+          noites: 0,
+          bruto: 0,
+          comissao: 0,
+          repasse: 0,
+          despesasTR: 0,
+        });
+      }
+    }
+
+    (reservas || []).forEach((r) => {
+      const rEntrada = new Date(r.data_entrada + 'T00:00:00');
+      const rSaida = new Date(r.data_saida + 'T00:00:00');
+
+      // Noites contidas dentro do período filtrado
+      const eInicio = rEntrada < dInicio ? dInicio : rEntrada;
+      const eFim = rSaida > dFim ? dFim : rSaida;
+      const noitesNoPeriodo = Math.max(0, Math.round((eFim - eInicio) / 86400000));
+      totalNoitesOcupadas += noitesNoPeriodo;
+
+      const cruzaMes = !mesmoMes(rEntrada, rSaida);
+      let diariasPeriodo = 0;
+      let comissaoPeriodo = 0;
+      let repassePeriodo = 0;
+
+      if (!ehAnoInteiro) {
+        // Modo Mensal Específico
+        if (cruzaMes) {
+          const chaveComp = `${r.id}_${inicio}`;
+          const comp = mapaCompetencias.get(chaveComp);
+          if (comp) {
+            diariasPeriodo = Number(comp.valor_bruto_mes);
+            comissaoPeriodo = Number(comp.valor_comissao_mes);
+            repassePeriodo = Number(comp.valor_proprietario_mes);
+          } else {
+            alertasInconsistencia.push(r.hospede);
+            const totalNoitesReserva = Math.max(1, Math.round((rSaida - rEntrada) / 86400000));
+            const frac = noitesNoPeriodo / totalNoitesReserva;
+            diariasPeriodo = (Number(r.valor_bruto || 0) - Number(r.valor_limpeza || 0)) * frac;
+            comissaoPeriodo = Number(r.valor_comissao || 0) * frac;
+            repassePeriodo = Number(r.valor_proprietario || 0) * frac;
+          }
+        } else {
+          diariasPeriodo = Number(r.valor_bruto || 0) - Number(r.valor_limpeza || 0);
+          comissaoPeriodo = Number(r.valor_comissao || 0);
+          repassePeriodo = Number(r.valor_proprietario || 0);
+        }
+      } else {
+        // Modo Ano Inteiro
+        if (cruzaMes) {
+          // Itera por todos os meses que a reserva toca no ano
+          let cursor = new Date(eInicio);
+          let encontrouComp = false;
+          let contadaNoMesEntrada = false; // conta a reserva uma vez, no mês do check-in
+          while (cursor < eFim) {
+            const mesRef = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, '0')}-01`;
+            const comp = mapaCompetencias.get(`${r.id}_${mesRef}`);
+            if (comp) {
+              encontrouComp = true;
+              const vB = Number(comp.valor_bruto_mes);
+              const vC = Number(comp.valor_comissao_mes);
+              const vP = Number(comp.valor_proprietario_mes);
+              diariasPeriodo += vB;
+              comissaoPeriodo += vC;
+              repassePeriodo += vP;
+
+              // Distribui na evolução mensal
+              const chaveMes = mesRef.slice(0, 7);
+              if (evolucaoMensalMap.has(chaveMes)) {
+                const evo = evolucaoMensalMap.get(chaveMes);
+                // Conta a reserva uma vez, no mês do check-in
+                if (!contadaNoMesEntrada) {
+                  evo.reservas += 1;
+                  contadaNoMesEntrada = true;
+                }
+                evo.noites += comp.noites;
+                evo.bruto += vB;
+                evo.comissao += vC;
+                evo.repasse += vP;
+              }
+            }
+            cursor.setMonth(cursor.getMonth() + 1);
+            cursor.setDate(1);
+          }
+
+          if (!encontrouComp) {
+            alertasInconsistencia.push(r.hospede);
+            const totalNoitesReserva = Math.max(1, Math.round((rSaida - rEntrada) / 86400000));
+            const frac = noitesNoPeriodo / totalNoitesReserva;
+            diariasPeriodo = (Number(r.valor_bruto || 0) - Number(r.valor_limpeza || 0)) * frac;
+            comissaoPeriodo = Number(r.valor_comissao || 0) * frac;
+            repassePeriodo = Number(r.valor_proprietario || 0) * frac;
+          }
+        } else {
+          // Reserva 100% contida dentro de um único mês
+          const vB = Number(r.valor_bruto || 0) - Number(r.valor_limpeza || 0);
+          const vC = Number(r.valor_comissao || 0);
+          const vP = Number(r.valor_proprietario || 0);
+          diariasPeriodo = vB;
+          comissaoPeriodo = vC;
+          repassePeriodo = vP;
+
+          const chaveMes = r.data_entrada.slice(0, 7);
+          if (evolucaoMensalMap.has(chaveMes)) {
+            const evo = evolucaoMensalMap.get(chaveMes);
+            evo.reservas += 1;
+            evo.noites += noitesNoPeriodo;
+            evo.bruto += vB;
+            evo.comissao += vC;
+            evo.repasse += vP;
+          }
+        }
+      }
+
+      // Limpeza é reconhecida integralmente no mês do check-out (PRD §6.3 / RF29)
+      const checkoutNoPeriodo = r.data_saida >= inicio && r.data_saida < fim;
+      const limpezaPeriodo = checkoutNoPeriodo ? Number(r.valor_limpeza || 0) : 0;
+      const brutoReservaNoPeriodo = diariasPeriodo + limpezaPeriodo;
+
+      if (ehAnoInteiro && checkoutNoPeriodo) {
+        const mesCheckout = r.data_saida.slice(0, 7);
+        if (evolucaoMensalMap.has(mesCheckout)) {
+          evolucaoMensalMap.get(mesCheckout).bruto += limpezaPeriodo;
+        }
+      }
+
+      totalBruto += brutoReservaNoPeriodo;
+      totalLimpeza += limpezaPeriodo;
+      totalComissao += comissaoPeriodo;
+      totalRepasseDiarias += repassePeriodo;
+
+      // Agrupamento para a Tabela por Imóvel (Detalhamento)
+      const imId = r.imovel_id;
+      const imNome = r.imoveis?.nome_referencia || 'Imóvel';
+      const imCod = r.imoveis?.codigo_interno || '';
+      if (!rankingImoveisMap.has(imId)) {
+        rankingImoveisMap.set(imId, {
+          id: imId,
+          nome: imNome,
+          codigo: imCod,
+          locacoes: 0,
+          noites: 0,
+          bruto: 0,
+          comissao: 0,
+          repasseBruto: 0,
+        });
+      }
+      const itemIm = rankingImoveisMap.get(imId);
+      itemIm.locacoes += 1;
+      itemIm.noites += noitesNoPeriodo;
+      itemIm.bruto += brutoReservaNoPeriodo;
+      itemIm.comissao += comissaoPeriodo;
+      itemIm.repasseBruto += repassePeriodo;
+
+      // Agrupamento para Ranking de Hóspedes (Top Clientes)
+      const hospNome = (r.hospede || 'Não identificado').trim();
+      const hospKey = hospNome.toLowerCase();
+      if (!rankingHospedesMap.has(hospKey)) {
+        rankingHospedesMap.set(hospKey, { nome: hospNome, reservas: 0, noites: 0, totalGasto: 0 });
+      }
+      const itemHosp = rankingHospedesMap.get(hospKey);
+      itemHosp.reservas += 1;
+      itemHosp.noites += noitesNoPeriodo;
+      itemHosp.totalGasto += brutoReservaNoPeriodo;
+    });
+
+    // 6. Taxa de ocupação calculada sobre imóveis ativos (RF27)
+    const imoveisAtivos = imoveisLista.filter((i) => i.ativo !== false);
+    const qtdImoveisCapacidade = imovelId ? 1 : Math.max(1, imoveisAtivos.length);
+    const noitesPossiveis = diasNoPeriodo * qtdImoveisCapacidade;
+    const taxaOcupacao = noitesPossiveis > 0 ? (totalNoitesOcupadas / noitesPossiveis) : 0;
+    const diariaMedia = totalNoitesOcupadas > 0 ? (totalBruto - totalLimpeza) / totalNoitesOcupadas : 0;
+    const repasseTotalLiquido = Math.max(0, totalRepasseDiarias - totalDeducoesProprietario);
+    const lucroOperacional = totalComissao - totalDespesasTR;
+
+    // Alerta de inconsistência de dados
+    const avisoEl = document.getElementById('aviso-inconsistencia');
+    if (alertasInconsistencia.length > 0) {
+      const nomes = [...new Set(alertasInconsistencia)].join(', ');
+      avisoEl.innerHTML = `<strong>Atenção:</strong> As reservas de <em>${escapeHtml(nomes)}</em> cruzam viradas de mês sem divisão salva em <code>reserva_competencias</code>. Seus valores foram estimados proporcionalmente às noites.`;
+      avisoEl.classList.remove('hidden');
+    } else {
+      avisoEl.classList.add('hidden');
+    }
+
+    // 7. Renderização dos KPIs
+    document.getElementById('kpi-bruto').textContent = fmtMoeda(totalBruto);
+    document.getElementById('kpi-ocupacao').textContent = fmtPercentual(taxaOcupacao);
+    document.getElementById('kpi-noites-detalhe').textContent = `${totalNoitesOcupadas} de ${noitesPossiveis} noites (${qtdImoveisCapacidade} imóvel${qtdImoveisCapacidade > 1 ? 'is' : ''})`;
+    document.getElementById('kpi-reservas-qtd').textContent = (reservas || []).length;
+    document.getElementById('kpi-diarias-media').textContent = `Média diária: ${fmtMoeda(diariaMedia)}`;
+    document.getElementById('kpi-limpeza').textContent = fmtMoeda(totalLimpeza);
+
+    if (ehGestorOuAdmin) {
+      document.getElementById('kpi-comissao').textContent = fmtMoeda(totalComissao);
+      document.getElementById('kpi-repasse').textContent = fmtMoeda(repasseTotalLiquido);
+      document.getElementById('kpi-deducoes-detalhe').textContent = totalDeducoesProprietario > 0
+        ? `− ${fmtMoeda(totalDeducoesProprietario)} em manutenções`
+        : 'Sem deduções no período';
+      document.getElementById('kpi-despesas').textContent = fmtMoeda(totalDespesasTR);
+      document.getElementById('kpi-despesas-detalhe').textContent = imovelId
+        ? 'Custos de manutenção do imóvel'
+        : (ehAnoInteiro ? 'Parcelas + Custos TR (Ano)' : 'Parcelas + Manutenções da TR');
+      document.getElementById('kpi-lucro').textContent = fmtMoeda(lucroOperacional);
+      document.getElementById('kpi-lucro').className = `text-xl font-bold ${lucroOperacional >= 0 ? 'text-emerald-700' : 'text-red-600'}`;
+    }
+
+    // 8. Tabela de Evolução Mensal (visível só quando Ano Inteiro)
+    const secaoEvolucao = document.getElementById('secao-evolucao-mensal');
+    if (ehAnoInteiro) {
+      secaoEvolucao.classList.remove('hidden');
+      renderizarEvolucaoMensal(evolucaoMensalMap, parcelasPorMesMap, manutsPorMesMap, imovelId);
+    } else {
+      secaoEvolucao.classList.add('hidden');
+    }
+
+    // 9. Renderização das tabelas de Imóveis e Hóspedes
+    renderizarTabelaImoveis(Array.from(rankingImoveisMap.values()), manutsPorImovelMap, diasNoPeriodo);
+    renderizarRankingHospedes(Array.from(rankingHospedesMap.values()));
+  }
+
+  function renderizarEvolucaoMensal(mapaEvolucao, mapaParcelas, mapaManuts, imovelId) {
+    const tbody = document.getElementById('tbody-evolucao-mensal');
+    const tfoot = document.getElementById('tfoot-evolucao-mensal');
+    tbody.innerHTML = '';
+
+    let totRes = 0, totNoites = 0, totBruto = 0, totCom = 0, totRep = 0, totDesp = 0;
+
+    mapaEvolucao.forEach((dados, mesStr) => {
+      const pTR = mapaParcelas.get(mesStr) || 0;
+      const mTR = mapaManuts.get(mesStr)?.tr || 0;
+      const mProp = mapaManuts.get(mesStr)?.cobradoProp || 0;
+      const despMes = imovelId ? mTR : (pTR + mTR);
+      const repasseLiquidoMes = Math.max(0, dados.repasse - mProp);
+
+      totRes += dados.reservas;
+      totNoites += dados.noites;
+      totBruto += dados.bruto;
+      totCom += dados.comissao;
+      totRep += repasseLiquidoMes;
+      totDesp += despMes;
+
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row text-xs sm:text-sm';
+      tr.innerHTML = `
+        <td class="py-2.5 px-4 font-semibold text-slate-800">${NOMES_MESES[dados.mesIdx]}</td>
+        <td class="py-2.5 px-4 text-center text-slate-600">${dados.reservas}</td>
+        <td class="py-2.5 px-4 text-center text-slate-600">${dados.noites}</td>
+        <td class="py-2.5 px-4 text-right font-medium text-slate-800">${fmtMoeda(dados.bruto)}</td>
+        <td class="py-2.5 px-4 text-right tr-text-azul font-semibold" data-perfil="gestor,administrador">${fmtMoeda(dados.comissao)}</td>
+        <td class="py-2.5 px-4 text-right text-emerald-700 font-semibold" data-perfil="gestor,administrador">${fmtMoeda(repasseLiquidoMes)}</td>
+        <td class="py-2.5 px-4 text-right text-amber-700 font-medium" data-perfil="gestor,administrador">${fmtMoeda(despMes)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    tfoot.innerHTML = `
+      <tr>
+        <td class="py-3 px-4 text-slate-800">Total Anual</td>
+        <td class="py-3 px-4 text-center">${totRes}</td>
+        <td class="py-3 px-4 text-center">${totNoites}</td>
+        <td class="py-3 px-4 text-right text-slate-900">${fmtMoeda(totBruto)}</td>
+        <td class="py-3 px-4 text-right tr-text-azul" data-perfil="gestor,administrador">${fmtMoeda(totCom)}</td>
+        <td class="py-3 px-4 text-right text-emerald-700" data-perfil="gestor,administrador">${fmtMoeda(totRep)}</td>
+        <td class="py-3 px-4 text-right text-amber-700" data-perfil="gestor,administrador">${fmtMoeda(totDesp)}</td>
+      </tr>
+    `;
+
+    aplicarVisibilidadePorPerfil(perfil);
+  }
+
+  function renderizarTabelaImoveis(lista, deducoesMap, diasNoPeriodo) {
+    const tbody = document.getElementById('tbody-ranking-imoveis');
+    const vazio = document.getElementById('ranking-imoveis-vazio');
+    tbody.innerHTML = '';
+
+    if (!lista.length) {
+      vazio.classList.remove('hidden');
+      return;
+    }
+    vazio.classList.add('hidden');
+
+    lista.sort((a, b) => b.bruto - a.bruto);
+
+    lista.forEach((item, index) => {
+      const taxaImovel = diasNoPeriodo > 0 ? (item.noites / diasNoPeriodo) : 0;
+      const deducoes = deducoesMap.get(item.id) || 0;
+      const repasseLiquido = Math.max(0, item.repasseBruto - deducoes);
+
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row text-xs sm:text-sm';
+      tr.innerHTML = `
+        <td class="py-2.5 px-3 font-bold text-slate-400">${index + 1}</td>
+        <td class="py-2.5 px-3 font-medium text-slate-800">
+          ${escapeHtml(item.nome)}
+          ${item.codigo ? `<span class="text-xs text-slate-400 block">${escapeHtml(item.codigo)}</span>` : ''}
+        </td>
+        <td class="py-2.5 px-3 text-center">
+          <span class="font-semibold text-slate-700">${fmtPercentual(taxaImovel)}</span>
+          <span class="text-[11px] text-slate-400 block">${item.noites} noites</span>
+        </td>
+        <td class="py-2.5 px-3 text-center font-medium text-slate-600">${item.locacoes}</td>
+        <td class="py-2.5 px-3 text-right font-semibold text-slate-800">${fmtMoeda(item.bruto)}</td>
+        <td class="py-2.5 px-3 text-right tr-text-azul font-medium" data-perfil="gestor,administrador">${fmtMoeda(item.comissao)}</td>
+        <td class="py-2.5 px-3 text-right text-emerald-700 font-semibold" data-perfil="gestor,administrador" title="Bruto: ${fmtMoeda(item.repasseBruto)} | Deduções: ${fmtMoeda(deducoes)}">
+          ${fmtMoeda(repasseLiquido)}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    aplicarVisibilidadePorPerfil(perfil);
+  }
+
+  function renderizarRankingHospedes(lista) {
+    const tbody = document.getElementById('tbody-ranking-hospedes');
+    const vazio = document.getElementById('ranking-hospedes-vazio');
+    tbody.innerHTML = '';
+
+    if (!lista.length) {
+      vazio.classList.remove('hidden');
+      return;
+    }
+    vazio.classList.add('hidden');
+
+    lista.sort((a, b) => b.totalGasto - a.totalGasto);
+
+    lista.slice(0, 10).forEach((item, index) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row text-xs sm:text-sm';
+      tr.innerHTML = `
+        <td class="py-2.5 px-4 font-bold text-slate-400">${index + 1}</td>
+        <td class="py-2.5 px-4 font-medium text-slate-800">
+          ${escapeHtml(item.nome)}
+          <span class="text-[11px] text-slate-400 block">${item.reservas} ${item.reservas === 1 ? 'reserva' : 'reservas'}</span>
+        </td>
+        <td class="py-2.5 px-4 text-center text-slate-600 font-semibold">${item.noites}</td>
+        <td class="py-2.5 px-4 text-right font-semibold text-slate-800">${fmtMoeda(item.totalGasto)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Inicialização e listeners
+  popularAnos();
+  const dataHoje = new Date();
+  document.getElementById('filtro-mes').value = dataHoje.getMonth() + 1;
+  document.getElementById('filtro-ano').value = dataHoje.getFullYear();
+
+  document.getElementById('filtro-mes').addEventListener('change', atualizarDashboard);
+  document.getElementById('filtro-ano').addEventListener('change', atualizarDashboard);
+  document.getElementById('filtro-imovel').addEventListener('change', atualizarDashboard);
+
+  document.getElementById('btn-mes-atual').addEventListener('click', () => {
+    const agora = new Date();
+    document.getElementById('filtro-mes').value = agora.getMonth() + 1;
+    document.getElementById('filtro-ano').value = agora.getFullYear();
+    document.getElementById('filtro-imovel').value = '';
+    atualizarDashboard();
+  });
+
+  await carregarImoveisFiltro();
+  await atualizarDashboard();
 </script>
 </body>
 </html>

@@ -12,8 +12,9 @@ tr_reserva/
 │   ├── reservas.html        ← pronto (Etapa 4)
 │   ├── imoveis.html         ← pronto (Etapa 3)
 │   ├── proprietarios.html   ← pronto (Etapa 3)
-│   ├── financeiro.html      (a criar — Etapa 5)
-│   ├── relatorios.html      (a criar — Etapa 7)
+│   ├── financeiro.html      ← pronto (Etapa 5)
+│   ├── fechamento.html      ← pronto (Etapa 6)
+│   ├── relatorios.html      ← pronto (Etapa 7)
 │   └── parametros.html      ← pronto (Etapa 2, só perfil Gestor)
 └── assets/
     ├── css/
@@ -153,13 +154,326 @@ e acesse `http://localhost:5500`.
   HTML/CSS no topo do menu lateral (`tr-logo-ring`) continua como
   está por enquanto — dá pra trocar pelo SVG também, se preferir.
 
-## Próximos passos (Etapa 5)
+## Financeiro (Etapa 5)
 
-- Criar `app/financeiro.html`: manutenções com dedução automática no
-  repasse, despesas da TR com rateio de parcelas, pagamentos de
-  pessoal e a tela de repasses por proprietário/mês.
-- Pendência técnica (não urgente): `dados_acesso` em `imoveis` hoje é
-  só uma coluna comum — a tela esconde a aba "Acesso" de quem não é
-  Gestor/Administrador, mas o RLS atual não impede uma chamada direta
-  à API de ler essa coluna. Vale revisar com uma política de RLS mais
-  fina (ou uma view separada) quando formos reforçar segurança.
+- `financeiro.html`: restrito a Gestor/Administrador (igual já reforça
+  a RLS de `repasses` no banco). Quatro blocos:
+- **Manutenções:** ao marcar "cobrar do proprietário", a manutenção
+  fica pendente de desconto (`repasse_id` nulo) até entrar no próximo
+  repasse gerado daquele imóvel — é a dedução automática do RF14.
+- **Despesas da TR:** `ratearDespesa()` (novo em `calculo.js`) distribui
+  o valor em parcelas mensais a partir do mês da compra, testado com
+  Node contra o exemplo real da planilha (Toalhas R$1.752,80 em 10×
+  = R$175,28 cada, sobrando o ajuste de centavos na última parcela).
+- **Pagamentos de pessoal:** registro simples (funcionário, data,
+  valor, imóveis atendidos, recibo).
+- **Repasses:** sem botão — enquanto o repasse do mês está "pendente",
+  a tela recalcula sozinha (ao abrir a página, trocar o mês, ou
+  lançar/concluir/excluir uma manutenção), somando por imóvel as
+  reservas que tocam o mês — usando o valor já dividido em
+  `reserva_competencias` quando a reserva atravessa virada de mês, e o
+  valor cheio da reserva quando não atravessa — e descontando as
+  manutenções pendentes daquele imóvel. Isso reproduz o comportamento
+  da planilha (tudo por fórmula, sempre atual). Só ao marcar "Pago" o
+  valor fica congelado: dali em diante, nenhum recálculo automático
+  toca mais naquele repasse. Testado isoladamente (reserva comum +
+  reserva que atravessa mês, verificando que só a parte proporcional
+  de fevereiro entra na soma).
+- Não incluído ainda: tela de edição de manutenções/despesas já
+  lançadas (só adicionar e excluir por enquanto).
+
+## Fechamento Mensal (Etapa 6)
+
+- `fechamento.html`: restrito a Gestor/Administrador. Mostra, por mês:
+  Entrada TR (comissões, já respeitando a divisão de competência),
+  Despesas, Lucro bruto, Lucro líquido e a distribuição entre os
+  participantes cadastrados em Parâmetros.
+- **Mês aberto** (sem fechamento gravado, ou reaberto): tudo calculado
+  **ao vivo** toda vez que a página é aberta — mesma filosofia do
+  Repasses da Etapa 5, e também o comportamento da planilha hoje (tudo
+  por fórmula). `calcularFechamentoMensal()` (novo em `calculo.js`) faz
+  essa conta; testado isoladamente com um Supabase simulado (reserva
+  comum + reserva que atravessa mês + despesa parcelada + manutenção
+  TR + manutenção do proprietário, confirmando que só a manutenção da
+  TR entra nas despesas).
+- **Botão "Fechar mês":** grava um retrato definitivo em
+  `fechamentos_mensais` (`bloqueado = true`). A partir daí a tela
+  mostra os valores congelados daquele momento, não mais ao vivo.
+  Existe também "Reabrir mês" (`bloqueado = false`), para quem quiser
+  voltar ao modo ao vivo manualmente.
+- **Lançamento retroativo num mês já fechado — maleável, como você
+  pediu:** ao salvar/excluir uma reserva (`reservas.html`), uma despesa
+  ou uma manutenção **paga pela própria TR** (`financeiro.html`), se a
+  data cair num mês fechado, aparece um aviso explicando que isso vai
+  alterar o fechamento e pedindo confirmação. Se confirmado, o
+  lançamento é salvo normalmente e o fechamento daquele mês é
+  recalculado na hora — continua "fechado", só que com os números
+  corrigidos; ninguém precisa reabrir manualmente. Testado
+  isoladamente (mês fechado pede confirmação; mês aberto não pede
+  nada). Manutenção **cobrada do proprietário** não dispara esse
+  aviso, porque não entra no fechamento — ela afeta o repasse do
+  imóvel, não a Entrada TR/Despesas da empresa.
+
+## Edição (adicionado após a Etapa 6)
+
+Cinco pontos que só tinham "adicionar e excluir" ganharam edição:
+
+- **Reservas** (`reservas.html`): botão "Editar" reabre o mesmo modal de
+  lançamento, já preenchido, com a prévia de cálculo recalculando
+  conforme você altera os campos. Ao salvar, a divisão de competência
+  antiga é apagada e recriada do zero (os valores podem ter mudado). O
+  aviso de "mês fechado" considera as datas antigas **e** as novas —
+  editar uma reserva que saiu de um mês fechado para outro avisa sobre
+  os dois.
+- **Despesas, Manutenções e Pagamentos de pessoal** (`financeiro.html`):
+  edição inline no mesmo formulário de cada seção — o botão "Adicionar"
+  vira "Salvar alterações" e aparece um "Cancelar" para sair do modo
+  edição sem salvar. Em Despesas, editar refaz as parcelas do zero
+  (`despesa_parcelas`); em Manutenções, o aviso de mês fechado olha
+  tanto o estado antigo quanto o novo do campo "cobrado do
+  proprietário", já que isso muda se a manutenção entra ou não no
+  fechamento.
+- **Contas bancárias** (`proprietarios.html`): mesmo padrão inline
+  dentro do modal do proprietário — edita favorecido, tipo e dados
+  bancários de uma conta já cadastrada (tornar padrão e remover já
+  existiam).
+
+Todos os cinco foram conferidos (sintaxe + IDs) antes de entregar.
+
+## Relatórios PDF (Etapa 7)
+
+- `relatorios.html`: restrito a Gestor/Administrador. Gera PDF mensal
+  ou anual, por imóvel, usando `jspdf` + `jspdf-autotable` (carregados
+  via CDN — jsdelivr `+esm`, mesmo padrão já usado para o Supabase).
+  Cabeçalho oficial (nome da empresa, imóvel, proprietário, período),
+  indicadores consolidados (nº de reservas, diárias, bruto, média de
+  diária, limpeza, comissão, deduções, líquido repassado — e taxa de
+  ocupação no mensal), tabela detalhada por reserva, tabela de
+  deduções (manutenções cobradas do proprietário) e campo de
+  observações livre.
+- **Decisão importante de design, documentada para não confundir no
+  futuro:** este relatório agrupa as reservas pelo **mês de check-in**
+  (como um extrato tradicional — a reserva aparece inteira no mês em
+  que começou). Isso é **diferente** do Fechamento Mensal (Etapa 6),
+  que usa a divisão de competência por noite para a contabilidade da
+  empresa. Para uma reserva que atravessa virada de mês, os dois
+  relatórios vão mostrar números diferentes para aquele mês — é
+  esperado, não é bug. A taxa de ocupação é a exceção: ela conta as
+  noites realmente ocupadas dentro do mês (overlap), não por check-in,
+  porque fisicamente o imóvel está ocupado nesses dias independente de
+  quando a reserva começou.
+- Testei isoladamente com Node a matemática de limites de mês (inclusive
+  virada de ano, dezembro→janeiro), contagem de noites e o recorte de
+  noites ocupadas dentro do mês, antes de usar na tela.
+- **Refatoração de passagem:** a lógica de gerar/atualizar um repasse
+  (que já existia em `financeiro.html`) foi movida para `calculo.js`
+  (`calcularBrutoPorImovelNoMes`, `gerarRepasseImovel`,
+  `sincronizarRepassesDoMes`) — `financeiro.html` agora importa em vez
+  de duplicar, e fica pronta para o Dashboard (Etapa 8) reaproveitar
+  também.
+
+## Lançamentos de teste com dados reais (planilha atualizada)
+
+Em `testes/lancamentos_teste_planilha_2026.sql` (fora da pasta do app,
+na raiz do projeto) — 15 lançamentos reais extraídos da aba "2026" da
+planilha atual, prontos para rodar no SQL Editor do Supabase: 10
+reservas simples + 4 que atravessam virada de mês (já com a divisão de
+competência calculada e conferida) + 1 reserva direta. Cria também os
+8 proprietários, contas bancárias e 8 imóveis necessários (idempotente
+— pode rodar mais de uma vez sem duplicar).
+
+**Bug encontrado e corrigido a partir desse teste:** `dividirCompetencia()`
+calculava o repasse mensal (`valorProprietarioMes`) **antes** do ajuste
+de centavos corrigir a comissão — então, quando a correção de
+arredondamento caía no mês errado, o repasse ficava com o valor
+desatualizado (1 centavo de diferença). Corrigido invertendo a ordem:
+ajuste de centavos primeiro, repasse por mês depois. Validado com 2.000
+casos aleatórios (zero falhas) e uma nova trava de regressão no bloco
+`?testCalculo=1`.
+
+## Achados analisando a planilha atual (pontos de regra a decidir)
+
+1. **A comissão diferenciada do RV (10%) não aparece mais em 2026** —
+   todos os imóveis testados, incluindo "Rv Conceito" e "Rv conceito 2",
+   usam 20% flat. Se vocês realmente padronizaram para 20% em todo
+   lugar, não precisa de nenhuma exceção cadastrada em Parâmetros. Vale
+   confirmar se isso é intencional.
+2. **O canal de venda (Airbnb/Booking) sumiu da planilha.** A coluna que
+   antes indicava a plataforma agora só tem "TR"/"Tiê" (parece indicar
+   a conta de depósito, não o canal). Isso conflita com `reservas.html`,
+   que hoje **exige** um canal ao lançar. Precisamos decidir: o canal
+   deixou de ser controlado e o campo deveria virar opcional, ou a Tiê
+   ainda sabe informar isso na hora do lançamento mesmo não estando mais
+   na planilha?
+3. **O portfólio de imóveis cresceu bastante** — de ~12 para 19 imóveis
+   distintos. Nomes como "Rv Conceito"/"Rv conceito 2" e
+   "Celimar"/"Celimar 2"/"Celimar 3" reforçam a importância de
+   padronizar nomes antes da migração (Etapa 9). Ponto positivo: os
+   códigos de imóvel estão todos únicos agora (não achei mais
+   duplicidade como o antigo código 7 repetido).
+4. **Confirmado com dado real:** um proprietário pode ter mais de uma
+   conta bancária (Marlene tem PIX e Santander, para dois imóveis
+   diferentes) — exatamente o que já construímos em Proprietários.
+5. **Taxa de limpeza por imóvel confirmada:** a maioria usa R$140, mas
+   Barra Ladeira/Barra III/Celimar/Celimar 2/Celimar 3 usam R$180 —
+   isso já é só o valor digitado por reserva (não precisa de parâmetro
+   algum), confirma que o desenho atual está certo.
+6. **Aba nova "ESTOQUE"** (Data da Compra, Item, Quantidade, Quantidade
+   Atual, Valor unitário) — não existe no PRD. Parece controle de
+   itens de reposição (ex.: lençóis, produtos de limpeza). Vale
+   perguntar se isso deve entrar no escopo do sistema ou fica de fora.
+7. A aba "PAGAMENTOS" (nova) generalizou "PAGAMENTOS PESSOAL" (antes só
+   Iris) para qualquer pessoa — confirma que nosso `pagamentos_pessoal`
+   já está modelado certo, nenhuma mudança necessária.
+
+## Financeiro em abas, Estoque e Log de atividades (ajustes pós-Etapa 7)
+
+- **Canal de venda:** `reservas.html` agora marca "TR" como padrão no
+  select (a planilha não registra mais o canal por reserva — ver
+  achados da seção anterior). Continua editável.
+- **Estoque entrou no escopo:** nova tabela `estoque` (data da compra,
+  item, quantidade comprada, quantidade atual, valor unitário) e uma
+  aba própria dentro de Financeiro, com o mesmo padrão de
+  criar/editar/excluir das outras seções.
+- **`financeiro.html` virou um editor em abas**, igual ao padrão do
+  editor de Imóveis (Etapa 3) — só que direto na tela, sem modal: menu
+  lateral no desktop, barra horizontal no mobile. Abas: Repasses,
+  Manutenções, Despesas, Pessoal, Estoque e Logs. Nenhuma lógica de
+  cálculo mudou, só a organização visual.
+- **Log de atividades:** nova tabela `logs_atividade` e um módulo
+  compartilhado (`assets/js/log.js`, função `registrarLog()`) chamado
+  depois de toda ação de criar, editar ou excluir — em Reservas,
+  Imóveis (dados gerais, regras específicas, coproprietários),
+  Proprietários (cadastro e contas bancárias), Financeiro (todas as
+  seções, incluindo marcar repasse como pago), Parâmetros (regras
+  gerais e participantes de lucro) e Fechamento (fechar/reabrir mês).
+  A aba **Logs** dentro de Financeiro mostra os últimos 200 registros:
+  quando, quem, ação, tabela e uma descrição legível. Só Gestor/
+  Administrador podem ler esse histórico; qualquer perfil autenticado
+  pode gravar a própria ação.
+- **Migração necessária no banco já existente:** como o Supabase de
+  vocês já está rodando, rodem
+  `testes/migracao_estoque_e_logs.sql` **uma vez** no SQL Editor —
+  cria as tabelas novas e corrige uma política de RLS (a leitura de
+  `usuarios` só deixava o Gestor ver o nome de outras pessoas; sem
+  isso, um Administrador veria "—" no lugar do nome de quem fez cada
+  ação nos Logs, exceto a própria). `schema.sql` já está atualizado
+  para refletir isso num banco novo do zero.
+
+## Correção: imóveis duplicados ao trocar para TR0XX
+
+Rodar o SQL de teste de novo com os códigos já no formato `TR0XX` criou
+imóveis **duplicados** — o `ON CONFLICT (codigo_interno)` não reconhece
+"Barra I (2)" e "Barra I (TR002)" como o mesmo imóvel, porque o código
+mudou. Rode `testes/corrigir_imoveis_duplicados.sql` uma vez: ele funde
+cada par pelo nome igual, move reservas/manutenções/etc. do antigo pro
+novo, e apaga o duplicado. Pode rodar mais de uma vez sem problema.
+
+## Código padronizado dos imóveis (TR0XX) e revisão visual
+
+- **Código interno dos imóveis:** convenção agora é `TR` + 3 dígitos
+  (ex.: `TR013`). O SQL de teste já foi atualizado para esse padrão. Ao
+  cadastrar um imóvel novo em `imoveis.html`, se você digitar só
+  números no campo "Código interno" e sair do campo, ele formata
+  sozinho (`13` → `TR013`).
+- **Revisão visual** (menos "quadrado"): `theme.css` ganhou sombra e
+  leve elevação ao passar o mouse nos cartões (`tr-card`, substitui o
+  `bg-white rounded-xl border border-slate-200` repetido em toda tela),
+  fundo do menu lateral com gradiente sutil em vez de cor chapada,
+  botões com sombra e leve "levantada" ao passar o mouse, campos de
+  texto com anel de foco mais suave, e **ícones em cada item do menu
+  lateral** (Dashboard, Reservas, Imóveis, etc.) em todas as páginas.
+  Nenhuma lógica mudou, só a casca visual.
+
+## Relatórios: pré-visualização e envio por e-mail
+
+Você mesmo já tinha avançado bastante nisso enquanto eu estava em outra
+tarefa — continuei de onde parou:
+
+- **Pré-visualização em modal** antes de baixar: o botão virou
+  "Visualizar Relatório", abre o PDF num iframe dentro de um modal,
+  com opções de Baixar, Imprimir e **Enviar por e-mail**.
+- **Cabeçalho do PDF redesenhado** por você: logo com geometria
+  paramétrica, CNPJ, endereço completo com quebra automática,
+  telefone/e-mail — e um **rodapé novo** com "Emitido em.../Página X de
+  Y" em todas as páginas.
+- **Carregamento do jsPDF mudou de ESM para `<script>` global**
+  (`window.jspdf`) — provavelmente por isso mesmo: eu tinha avisado que
+  não conseguiria testar o carregamento via `+esm` num navegador real,
+  e essa troca sugere que não carregou direito. Deixei assim, é mais
+  robusto para essas duas bibliotecas.
+- **O que eu completei agora:** o botão "Enviar por e-mail" ainda não
+  tinha um `addEventListener` (por isso não fazia nada), e as duas
+  chamadas de `abrirPreview()` não passavam o terceiro argumento
+  (`imovelId`, `tipo`, `periodoTexto`) que o envio por e-mail precisa.
+  Adicionei os dois.
+- **Edge Function** (`supabase/functions/enviar-relatorio/index.ts`,
+  código seu): busca o e-mail do proprietário **no banco** (nunca
+  confia no que o front manda), valida a sessão do usuário via RLS, e
+  envia o PDF em anexo usando Gmail SMTP (`denomailer`).
+
+### Como publicar a Edge Function
+
+Isso precisa da CLI do Supabase (não dá para criar uma Edge Function só
+pelo SQL Editor):
+
+```bash
+supabase login
+supabase link --project-ref <seu-project-ref>
+supabase functions deploy enviar-relatorio
+```
+
+E configurar os segredos (uma vez só):
+
+```bash
+supabase secrets set GMAIL_USER=trbrazilhost@gmail.com
+supabase secrets set GMAIL_APP_PASSWORD=<senha-de-app-do-gmail>
+```
+
+**Atenção:** `GMAIL_APP_PASSWORD` precisa ser uma ["senha de app" do
+Google](https://myaccount.google.com/apppasswords) — só existe com a
+verificação em duas etapas ativada na conta, e é diferente da senha
+normal do Gmail. `SUPABASE_URL` e `SUPABASE_ANON_KEY` não precisam ser
+configurados manualmente — toda Edge Function já recebe os dois
+automaticamente.
+
+**Pré-requisito nos dados:** o proprietário precisa ter e-mail
+cadastrado (`proprietarios.html` já tem esse campo) — sem isso, a
+função retorna erro "Proprietário sem e-mail cadastrado" em vez de
+enviar.
+
+## Ícones de ação e modais de visualização
+
+- **`assets/js/icones.js`** (novo): `btnVisualizar`, `btnEditar`,
+  `btnExcluir` e `celulaAcoes` — os antigos links de texto "Editar" /
+  "Excluir" / "Remover" viraram botões com ícone (olho, lápis, lixeira)
+  em toda lista do app. "Encerrar" e "tornar padrão" continuam como
+  texto — não são edição/exclusão, então não entraram no escopo.
+- **`exibirDetalhes()`** (novo em `modal.js`): modal de "ficha"
+  somente-leitura genérico, usado pelo botão de olho em Reservas
+  (incluindo reservas diretas), Manutenções, Despesas, Pagamentos de
+  Pessoal e Estoque — sem nenhum campo editável.
+- **Proprietários e Imóveis** são mais ricos (o editor já é um
+  modal/painel inteiro, não uma ficha simples), então ali o botão
+  "Visualizar" reabre o **mesmo** editor de sempre, só que travado:
+  todos os campos desabilitados, botão de salvar escondido, e — no
+  caso de Imóveis — os formulários de adicionar regra/coproprietário e
+  os botões de Encerrar/Excluir/Remover dentro dessas duas listas
+  também ficam ocultos. Zero risco de alterar algo por engano.
+- **Parâmetros não ganhou modal de visualização** — a tabela ali já
+  mostra tudo (tipo, valor, base, vigência) na própria linha, então um
+  modal só repetiria a mesma informação sem ganho nenhum.
+
+## Próximos passos (Etapa 8)
+
+- Dashboard: indicadores de bruto/líquido/repasse por mês e por
+  imóvel, ranking de imóveis e hóspedes, totais de limpeza e despesas,
+  com filtros por período e por imóvel.
+
+## Pendências técnicas (não urgentes)
+
+- `dados_acesso` em `imoveis` hoje é só uma coluna comum — a tela
+  esconde a aba "Acesso" de quem não é Gestor/Administrador, mas o RLS
+  atual não impede uma chamada direta à API de ler essa coluna. Vale
+  revisar com uma política de RLS mais fina (ou uma view separada)
+  quando formos reforçar segurança.

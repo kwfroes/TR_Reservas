@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Relatórios — TR Serviços de Reservas</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/logo.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/theme.css">
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.3/dist/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body class="min-h-screen bg-slate-50">
+
+  <div class="flex flex-col sm:flex-row min-h-screen">
+
+    <header class="sm:hidden flex items-center justify-between px-4 py-3 tr-bg-azul text-white sticky top-0 z-20">
+      <button id="btn-menu-abrir" aria-label="Abrir menu" aria-expanded="false" class="p-1 -ml-1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="tr-logo-ring rounded-md w-7 h-7 flex items-center justify-center">
+          <span class="text-xs font-extrabold"><span style="color: var(--tr-verde)">T</span><span class="text-white">R</span></span>
+        </div>
+        <span class="text-sm font-semibold">TR Reservas</span>
+      </div>
+      <span class="w-6" aria-hidden="true"></span>
+    </header>
+
+    <div id="sidebar-overlay" class="hidden sm:hidden fixed inset-0 bg-black/40 z-30"></div>
+
+    <aside id="sidebar"
+      class="fixed sm:static inset-y-0 left-0 z-40 w-64 sm:w-56 shrink-0 tr-bg-azul text-white flex flex-col -translate-x-full sm:translate-x-0 transition-transform duration-200">
+      <div class="flex items-center justify-between gap-2 px-4 py-4">
+        <div class="flex items-center gap-2">
+          <div class="tr-logo-ring rounded-md w-8 h-8 flex items-center justify-center shrink-0">
+            <span class="text-sm font-extrabold">
+              <span style="color: var(--tr-verde)">T</span><span class="text-white">R</span>
+            </span>
+          </div>
+          <span class="text-sm font-semibold">TR Reservas</span>
+        </div>
+        <button id="btn-menu-fechar" aria-label="Fechar menu" class="sm:hidden p-1 text-white/80 hover:text-white">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 px-2 space-y-1 text-sm">
+        <a href="dashboard.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></a>
+        <a href="reservas.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Reservas</span></a>
+        <a href="imoveis.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg><span>Imóveis</span></a>
+        <a href="proprietarios.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Proprietários</span></a>
+        <a href="financeiro.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg><span>Financeiro</span></a>
+        <a href="fechamento.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg><span>Fechamento</span></a>
+        <a href="relatorios.html" class="tr-nav-item ativo flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/></svg><span>Relatórios</span></a>
+        <a href="parametros.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>Parâmetros</span></a>
+      </nav>
+
+      <div class="px-4 py-4 border-t border-white/10">
+        <p id="usuario-nome" class="text-xs text-white/70 mb-2">—</p>
+        <button id="btn-sair" class="text-xs text-white/70 hover:text-white underline">Sair</button>
+      </div>
+    </aside>
+
+    <main class="flex-1 p-4 sm:p-6 min-w-0">
+     <div class="max-w-2xl mx-auto">
+
+      <h1 class="text-xl font-bold text-slate-900 mb-1">Relatórios</h1>
+      <p class="text-sm text-slate-500 mb-6">Prestação de contas em PDF, por imóvel — mensal ou anual.</p>
+
+      <section class="tr-card p-5 space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Imóvel *</label>
+          <select id="rl-imovel" required class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Tipo de relatório</label>
+          <div class="flex gap-4 text-sm">
+            <label class="flex items-center gap-2">
+              <input type="radio" name="rl-tipo" value="mensal" checked class="rounded-full border-slate-300">
+              Mensal
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="rl-tipo" value="anual" class="rounded-full border-slate-300">
+              Anual
+            </label>
+          </div>
+        </div>
+
+        <div id="campo-mes">
+          <label class="block text-xs font-medium text-slate-600 mb-1">Mês</label>
+          <input id="rl-mes" type="month" class="tr-input w-full sm:w-48 rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+        <div id="campo-ano" class="hidden">
+          <label class="block text-xs font-medium text-slate-600 mb-1">Ano</label>
+          <input id="rl-ano" type="number" min="2020" max="2100" class="tr-input w-full sm:w-32 rounded-lg border border-slate-300 px-3 py-2 text-sm">
+        </div>
+
+        <div id="campo-observacoes">
+          <label class="block text-xs font-medium text-slate-600 mb-1">Observações (aparece no PDF)</label>
+          <textarea id="rl-observacoes" rows="3" class="tr-input w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+            placeholder="Ex.: deduções extras, combinados com o proprietário, etc."></textarea>
+        </div>
+
+        <div class="flex justify-end pt-1">
+          <button id="btn-gerar-pdf" class="tr-btn rounded-lg px-4 py-2 text-sm font-semibold">Visualizar Relatório</button>
+        </div>
+      </section>
+
+      <p class="text-xs text-slate-400 mt-4">
+        O relatório agrupa as reservas pelo mês de check-in (igual a um extrato). A taxa de ocupação
+        considera as noites realmente ocupadas naquele mês, mesmo de reservas que começaram antes.
+      </p>
+
+     </div>
+    </main>
+  </div>
+
+  <div id="modal-preview" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-2 sm:p-6">
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-5xl h-full max-h-[95vh] flex flex-col overflow-hidden">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+      <h2 class="text-sm font-semibold text-slate-800">Pré-visualização do relatório</h2>
+      <button id="pv-fechar" aria-label="Fechar" class="p-1 text-slate-500 hover:text-slate-800">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+      </button>
+    </div>
+    <iframe id="pv-iframe" class="flex-1 w-full bg-slate-100" title="Pré-visualização do PDF"></iframe>
+    <div class="flex justify-end gap-2 px-4 py-3 border-t border-slate-200">
+      <button id="pv-cancelar" class="rounded-lg px-4 py-2 text-sm border border-slate-300 text-slate-700 hover:bg-slate-50">Fechar</button>
+      <button id="pv-baixar" class="rounded-lg px-4 py-2 text-sm border border-slate-300 text-slate-700 hover:bg-slate-50">Baixar PDF</button>
+      <button id="pv-email" class="rounded-lg px-4 py-2 text-sm border border-blue-600 text-blue-700 hover:bg-blue-50">Enviar por e-mail</button>
+      <button id="pv-imprimir" class="tr-btn rounded-lg px-4 py-2 text-sm font-semibold">Imprimir</button>
+    </div>
+  </div>
+  </div>
+
+<script type="module">
+  import { exigirSessao, exigirPerfil, sair, aplicarVisibilidadePorPerfil } from '../assets/js/auth-guard.js';
+  import { initSidebarMobile } from '../assets/js/sidebar.js';
+  import { supabase } from '../assets/js/supabaseClient.js';
+  import { mostrarAlerta } from '../assets/js/modal.js';
+  // import { jsPDF } from 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/+esm';
+  // import autoTable from 'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.3/+esm';
+  const { jsPDF } = window.jspdf;
+
+  initSidebarMobile();
+
+  const { nome, perfil } = await exigirSessao();
+  exigirPerfil(perfil, ['gestor', 'administrador']);
+
+  document.getElementById('usuario-nome').textContent = `${nome} · ${perfil}`;
+  aplicarVisibilidadePorPerfil(perfil);
+  document.getElementById('btn-sair').addEventListener('click', sair);
+
+  const fmtMoeda = (v) => (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const fmtData = (iso) => new Date(iso + 'T00:00:00').toLocaleDateString('pt-BR');
+  const NOMES_MES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+  function limitesDoMes(ano, mesIndice /* 0-11 */) {
+    const inicio = `${ano}-${String(mesIndice + 1).padStart(2, '0')}-01`;
+    const fimAno = mesIndice === 11 ? ano + 1 : ano;
+    const fimMes = mesIndice === 11 ? 1 : mesIndice + 2;
+    const fim = `${fimAno}-${String(fimMes).padStart(2, '0')}-01`;
+    return { inicio, fim };
+  }
+
+  function noitesEntre(a, b) {
+    return Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
+  }
+
+  // ----------------------- Seleção de imóvel / tipo -----------------------
+  async function carregarImoveis() {
+    const { data, error } = await supabase.from('imoveis').select('id, nome_referencia, codigo_interno').order('nome_referencia');
+    if (error) { await mostrarAlerta('Erro ao carregar imóveis: ' + error.message, { titulo: 'Erro' }); return; }
+    const select = document.getElementById('rl-imovel');
+    select.innerHTML = '<option value="">Selecione...</option>';
+    data.forEach((im) => {
+      const opt = document.createElement('option');
+      opt.value = im.id;
+      opt.textContent = `${im.nome_referencia} (${im.codigo_interno})`;
+      select.appendChild(opt);
+    });
+  }
+
+  document.querySelectorAll('input[name="rl-tipo"]').forEach((r) => {
+    r.addEventListener('change', () => {
+      const mensal = document.querySelector('input[name="rl-tipo"]:checked').value === 'mensal';
+      document.getElementById('campo-mes').classList.toggle('hidden', !mensal);
+      document.getElementById('campo-ano').classList.toggle('hidden', mensal);
+      document.getElementById('campo-observacoes').classList.toggle('hidden', !mensal);
+    });
+  });
+
+  // ----------------------- Dados: um mês de um imóvel -----------------------
+  // Agrupa pelo mês de CHECK-IN (como um extrato) — propositalmente diferente
+  // do Fechamento Mensal, que usa a divisão de competência para a contabilidade
+  // da empresa como um todo. Pequenas diferenças numa reserva que atravessa
+  // virada de mês são esperadas entre os dois relatórios.
+  async function dadosDoMes(imovelId, ano, mesIndice) {
+    const { inicio, fim } = limitesDoMes(ano, mesIndice);
+
+    const { data: reservas, error } = await supabase
+      .from('reservas')
+      .select('hospede, data_entrada, data_saida, valor_bruto, valor_limpeza, valor_comissao, valor_proprietario, numero_nf')
+      .eq('imovel_id', imovelId)
+      .gte('data_entrada', inicio)
+      .lt('data_entrada', fim)
+      .order('data_entrada');
+    if (error) throw error;
+
+    const { data: manutencoes, error: erroManut } = await supabase
+      .from('manutencoes')
+      .select('data, servico, valor')
+      .eq('imovel_id', imovelId)
+      .eq('cobrado_proprietario', true)
+      .gte('data', inicio)
+      .lt('data', fim);
+    if (erroManut) throw erroManut;
+
+    // Ocupação: noites realmente ocupadas no mês, de qualquer reserva que o
+    // toque (overlap), não só as que começaram nele.
+    const { data: reservasOverlap, error: erroOverlap } = await supabase
+      .from('reservas').select('data_entrada, data_saida').eq('imovel_id', imovelId).lt('data_entrada', fim).gt('data_saida', inicio);
+    if (erroOverlap) throw erroOverlap;
+
+    const inicioData = new Date(inicio + 'T00:00:00');
+    const fimData = new Date(fim + 'T00:00:00');
+    const diasNoMes = Math.round((fimData - inicioData) / 86400000);
+    let noitesOcupadas = 0;
+    reservasOverlap.forEach((r) => {
+      const entrada = new Date(r.data_entrada + 'T00:00:00');
+      const saida = new Date(r.data_saida + 'T00:00:00');
+      const ini = entrada < inicioData ? inicioData : entrada;
+      const fimR = saida > fimData ? fimData : saida;
+      noitesOcupadas += Math.max(0, Math.round((fimR - ini) / 86400000));
+    });
+
+    const totalDiarias = reservas.reduce((s, r) => s + noitesEntre(r.data_entrada, r.data_saida), 0);
+    const valorBrutoTotal = reservas.reduce((s, r) => s + Number(r.valor_bruto || 0), 0);
+    const totalLimpeza = reservas.reduce((s, r) => s + Number(r.valor_limpeza || 0), 0);
+    const totalComissao = reservas.reduce((s, r) => s + Number(r.valor_comissao || 0), 0);
+    const somaProprietario = reservas.reduce((s, r) => s + Number(r.valor_proprietario || 0), 0);
+    const totalDeducoes = manutencoes.reduce((s, m) => s + Number(m.valor || 0), 0);
+    const mediaDiaria = totalDiarias > 0 ? (valorBrutoTotal - totalLimpeza) / totalDiarias : 0;
+
+    return {
+      reservas, manutencoes,
+      totalReservas: reservas.length, totalDiarias, valorBrutoTotal, mediaDiaria,
+      totalLimpeza, totalComissao, totalDeducoes,
+      valorLiquidoRepassado: somaProprietario - totalDeducoes,
+      taxaOcupacao: diasNoMes > 0 ? noitesOcupadas / diasNoMes : 0,
+    };
+  }
+
+  // ----------------------- Desenho do PDF -----------------------
+  function desenharCabecalho(doc, { subtitulo, imovelNome, proprietarioNome, periodoTexto }) {
+    // 1. Fundo cinza claro da faixa (Banner)
+    const bannerY = 10, bannerH = 36;
+    doc.setFillColor(235, 237, 240);
+    doc.rect(14, bannerY, 182, bannerH, 'F');
+
+    // ===== LOGO – geometria paramétrica =====
+    const pad = 2;           // borda azul ao redor do box branco
+    const whiteW = 26;       // largura do box branco
+    const whiteH = 19;       // altura do box branco
+    const gapTexto = 2;      // espaço entre box branco e "BRAZIL HOST"
+    const capHost = 5.5 * 0.3528 * 0.72; // altura das maiúsculas do "BRAZIL HOST" (mm)
+
+    const logoW = whiteW + pad * 2;
+    const logoH = pad + whiteH + gapTexto + capHost + pad;
+    const logoX = 14 + 3;                          // pequena margem à esquerda (use 14 para encostar)
+    const logoY = bannerY + (bannerH - logoH) / 2; // centralizado verticalmente na faixa
+
+    // 2. Bloco Azul da Logo
+    doc.setFillColor(0, 74, 173); // #004AAD
+    doc.roundedRect(logoX, logoY, logoW, logoH, 3.5, 3.5, 'F');
+
+    // 3. Borda branca interna da Logo
+    const boxX = logoX + pad, boxY = logoY + pad;
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.6);
+    doc.roundedRect(boxX, boxY, whiteW, whiteH, 2.5, 2.5, 'S');
+
+    // 4. Letras T R – centralizadas no box branco
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(26);
+    const centroX = boxX + whiteW / 2;
+    const centroY = boxY + whiteH / 2;
+    const gapTR = 0.6; // espaço entre T e R – ajuste fino aqui
+    const wT = doc.getTextWidth('T');
+    const wR = doc.getTextWidth('R');
+    const xInicio = centroX - (wT + gapTR + wR) / 2;
+    const baseline = centroY + (26 * 0.3528 * 0.72) / 2;
+
+    doc.setTextColor(126, 217, 86); // #7ED956
+    doc.text('T', xInicio, baseline);
+    doc.setTextColor(255, 255, 255);
+    doc.text('R', xInicio + wT + gapTR, baseline);
+
+    // 5. Texto BRAZIL HOST – logo abaixo do box branco
+    doc.setFontSize(5.5);
+    doc.setTextColor(255, 255, 255);
+    doc.text('BRAZIL HOST', logoX + logoW / 2, boxY + whiteH + gapTexto + capHost, { align: 'center' });
+
+    // 6. Dados da Empresa (à direita do bloco azul)
+    const textX = logoX + logoW + 5;
+    const maxWidth = 196 - textX - 2;
+
+    doc.setTextColor(30, 41, 59);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('TR SERVIÇOS DE RESERVAS TURÍSTICAS LTDA', textX, 16.5);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.text('54.007.292/0001-13', textX, 21.5);
+
+    // Endereço longo – quebra automática
+    doc.setFontSize(7.2);
+    const endereco = 'AVENIDA TANCREDO NEVES, 1632, EDF SALVADOR TRADE CENTER, TORRE NORTE SL 1514, CAMINHO DAS ÁRVORES';
+    const linhasEndereco = doc.splitTextToSize(endereco, maxWidth);
+    doc.text(linhasEndereco, textX, 26.5);
+
+    // Cidade / CEP
+    const yCidade = 26.5 + (linhasEndereco.length * 3.6);
+    doc.setFontSize(8);
+    doc.text('SALVADOR - BAHIA, CEP: 41.820-021', textX, yCidade);
+
+    // Telefone + e-mail
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.text('(71) 9.8876-8130 - TRBRAZILHOST@GMAIL.COM', textX, yCidade + 4.5);
+
+    // 7. Dados Específicos do Relatório
+    let y = 52;
+    doc.setFontSize(11);
+    doc.setTextColor(0, 74, 173);
+    doc.setFont('helvetica', 'bold');
+    doc.text(subtitulo, 14, y);
+
+    y += 6;
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(71, 85, 105);
+
+    doc.text(`Imóvel: ${imovelNome}`, 14, y);
+    doc.text(`Proprietário: ${proprietarioNome}`, 105, y);
+
+    y += 5;
+    doc.text(`Período: ${periodoTexto}`, 14, y);
+    doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 105, y);
+
+    // Linha divisória
+    doc.setDrawColor(226, 232, 240);
+    doc.line(14, y + 3, 196, y + 3);
+
+    return y + 8;
+  }
+
+  function desenharRodape(doc) {
+    const totalPaginas = doc.getNumberOfPages();
+    const pageW = doc.internal.pageSize.getWidth();   // 210
+    const pageH = doc.internal.pageSize.getHeight();  // 297
+    const agora = new Date();
+    const emissao = `Emitido em ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} por TR BRAZIL HOST`;
+
+    for (let i = 1; i <= totalPaginas; i++) {
+      doc.setPage(i);
+
+      // Linha divisória
+      doc.setDrawColor(226, 232, 240);
+      doc.setLineWidth(0.3);
+      doc.line(14, pageH - 14, pageW - 14, pageH - 14);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(100, 116, 139);
+
+      // Esquerda: data de emissão
+      doc.text(emissao, 14, pageH - 9);
+
+      // Direita: contagem de páginas
+      doc.text(`Página ${i} de ${totalPaginas}`, pageW - 14, pageH - 9, { align: 'right' });
+    }
+  }
+
+  function desenharIndicadores(doc, y, indicadores) {
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 41, 59);
+    doc.text('Resumo do período', 14, y);
+    y += 6;
+
+    const linhas = [
+      ['Nº de reservas', String(indicadores.totalReservas)],
+      ['Total de diárias', `${indicadores.totalDiarias} noites`],
+      ['Valor bruto total', fmtMoeda(indicadores.valorBrutoTotal)],
+      ['Média de diária', fmtMoeda(indicadores.mediaDiaria)],
+      ['Total de limpeza', fmtMoeda(indicadores.totalLimpeza)],
+      ['Total de comissão', fmtMoeda(indicadores.totalComissao)],
+      ['Deduções (manutenção)', indicadores.totalDeducoes ? '− ' + fmtMoeda(indicadores.totalDeducoes) : '—'],
+      ['Valor líquido repassado', fmtMoeda(indicadores.valorLiquidoRepassado)],
+    ];
+    if (indicadores.taxaOcupacao != null) {
+      linhas.splice(2, 0, ['Taxa de ocupação', `${(indicadores.taxaOcupacao * 100).toFixed(1)}%`]);
+    }
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(71, 85, 105);
+    const colLargura = 91;
+    linhas.forEach((linha, i) => {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const x = 14 + col * colLargura;
+      const yLinha = y + row * 6;
+      doc.text(`${linha[0]}:`, x, yLinha);
+      doc.setFont('helvetica', 'bold');
+      doc.text(linha[1], x + 45, yLinha);
+      doc.setFont('helvetica', 'normal');
+    });
+
+    return y + Math.ceil(linhas.length / 2) * 6 + 6;
+  }
+
+    // ----------------------- Pré-visualização -----------------------
+  let pvDoc = null, pvNome = '', pvUrl = null;
+  let pvMeta = null;
+
+  function abrirPreview(doc, nomeArquivo, meta) {
+    pvDoc = doc;
+    pvMeta = meta;
+    pvNome = nomeArquivo;
+    if (pvUrl) URL.revokeObjectURL(pvUrl);
+    pvUrl = URL.createObjectURL(doc.output('blob'));
+    document.getElementById('pv-iframe').src = pvUrl;
+    document.getElementById('modal-preview').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fecharPreview() {
+    document.getElementById('modal-preview').classList.add('hidden');
+    document.getElementById('pv-iframe').src = 'about:blank';
+    document.body.style.overflow = '';
+    if (pvUrl) { URL.revokeObjectURL(pvUrl); pvUrl = null; }
+    pvDoc = null;
+  }
+
+  document.getElementById('pv-fechar').addEventListener('click', fecharPreview);
+  document.getElementById('pv-cancelar').addEventListener('click', fecharPreview);
+  document.getElementById('modal-preview').addEventListener('click', (e) => {
+    if (e.target.id === 'modal-preview') fecharPreview();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !document.getElementById('modal-preview').classList.contains('hidden')) fecharPreview();
+  });
+  document.getElementById('pv-baixar').addEventListener('click', () => { if (pvDoc) pvDoc.save(pvNome); });
+
+  document.getElementById('pv-email').addEventListener('click', async () => {
+    if (!pvDoc || !pvMeta) return;
+    const btn = document.getElementById('pv-email');
+    const textoOriginal = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      // jsPDF gera "data:application/pdf;filename=...;base64,XXXX" — pegamos
+      // só a parte depois da vírgula, que é o base64 puro.
+      const dataUri = pvDoc.output('datauristring');
+      const pdfBase64 = dataUri.substring(dataUri.indexOf(',') + 1);
+
+      const { data, error } = await supabase.functions.invoke('enviar-relatorio', {
+        body: {
+          imovelId: pvMeta.imovelId,
+          tipo: pvMeta.tipo,
+          periodoTexto: pvMeta.periodoTexto,
+          nomeArquivo: pvNome,
+          pdfBase64,
+        },
+      });
+
+      if (error) throw error;
+      if (data?.erro) throw new Error(data.erro);
+
+      await mostrarAlerta(`Relatório enviado para ${data.destinatario}.`, { titulo: 'Enviado' });
+    } catch (err) {
+      await mostrarAlerta('Erro ao enviar por e-mail: ' + (err.message || err), { titulo: 'Erro' });
+    } finally {
+      btn.disabled = false;
+      btn.textContent = textoOriginal;
+    }
+  });
+
+  document.getElementById('pv-imprimir').addEventListener('click', () => {
+    const frame = document.getElementById('pv-iframe');
+    try { frame.contentWindow.focus(); frame.contentWindow.print(); }
+    catch { window.open(pvUrl, '_blank'); } // fallback se o navegador bloquear
+  });
+
+  async function gerarPdfMensal() {
+    const imovelId = document.getElementById('rl-imovel').value;
+    const mesInput = document.getElementById('rl-mes').value; // 'YYYY-MM'
+    if (!imovelId || !mesInput) { await mostrarAlerta('Selecione o imóvel e o mês.', { titulo: 'Campos obrigatórios' }); return; }
+
+    const [ano, mesNum] = mesInput.split('-').map(Number);
+    const mesIndice = mesNum - 1;
+
+    const { data: imovel, error: erroImovel } = await supabase
+      .from('imoveis').select('nome_referencia, proprietarios!proprietario_id(nome)').eq('id', imovelId).single();
+    if (erroImovel) { await mostrarAlerta('Erro: ' + erroImovel.message, { titulo: 'Erro' }); return; }
+
+    let dados;
+    try {
+      dados = await dadosDoMes(imovelId, ano, mesIndice);
+    } catch (err) {
+      await mostrarAlerta('Erro ao montar o relatório: ' + err.message, { titulo: 'Erro' });
+      return;
+    }
+
+    const doc = new jsPDF();
+    let y = desenharCabecalho(doc, {
+      subtitulo: 'Relatório Mensal de Prestação de Contas',
+      imovelNome: imovel.nome_referencia,
+      proprietarioNome: imovel.proprietarios?.nome || '—',
+      periodoTexto: `${NOMES_MES[mesIndice]}/${ano}`,
+    });
+    y = desenharIndicadores(doc, y, dados);
+
+    doc.autoTable({
+      startY: y,
+      margin: { bottom: 20 },
+      head: [['Hóspede', 'Check-in', 'Check-out', 'Noites', 'Valor', 'Comissão', 'Líquido', 'NF']],
+      body: dados.reservas.map((r) => [
+        r.hospede, fmtData(r.data_entrada), fmtData(r.data_saida), String(noitesEntre(r.data_entrada, r.data_saida)),
+        fmtMoeda(r.valor_bruto), fmtMoeda(r.valor_comissao), fmtMoeda(r.valor_proprietario), r.numero_nf || '—',
+      ]),
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [0, 74, 173] },
+      didDrawPage: () => {},
+    });
+    y = doc.lastAutoTable.finalY + 8;
+
+    if (dados.manutencoes.length) {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(30, 41, 59);
+      doc.text('Deduções do período', 14, y);
+      y += 4;
+      doc.autoTable({
+        startY: y,
+        margin: { bottom: 20 },
+        head: [['Data', 'Serviço', 'Valor']],
+        body: dados.manutencoes.map((m) => [fmtData(m.data), m.servico, fmtMoeda(m.valor)]),
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [180, 83, 9] },
+      });
+      y = doc.lastAutoTable.finalY + 8;
+    }
+
+    const observacoes = document.getElementById('rl-observacoes').value.trim();
+    if (observacoes) {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(30, 41, 59);
+      doc.text('Observações', 14, y);
+      y += 6;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(71, 85, 105);
+      doc.text(doc.splitTextToSize(observacoes, 182), 14, y);
+    }
+
+      desenharRodape(doc);
+      abrirPreview(doc, `relatorio-${imovel.nome_referencia.replace(/\s+/g, '_')}-${mesInput}.pdf`, {
+        imovelId, tipo: 'mensal', periodoTexto: `${NOMES_MES[mesIndice]}/${ano}`,
+      });
+  }
+
+  async function gerarPdfAnual() {
+    const imovelId = document.getElementById('rl-imovel').value;
+    const ano = Number(document.getElementById('rl-ano').value);
+    if (!imovelId || !ano) { await mostrarAlerta('Selecione o imóvel e o ano.', { titulo: 'Campos obrigatórios' }); return; }
+
+    const { data: imovel, error: erroImovel } = await supabase
+      .from('imoveis').select('nome_referencia, proprietarios!proprietario_id(nome)').eq('id', imovelId).single();
+    if (erroImovel) { await mostrarAlerta('Erro: ' + erroImovel.message, { titulo: 'Erro' }); return; }
+
+    let dadosPorMes;
+    try {
+      dadosPorMes = [];
+      for (let m = 0; m < 12; m++) dadosPorMes.push(await dadosDoMes(imovelId, ano, m));
+    } catch (err) {
+      await mostrarAlerta('Erro ao montar o relatório: ' + err.message, { titulo: 'Erro' });
+      return;
+    }
+
+    const totais = dadosPorMes.reduce((acc, d) => ({
+      totalReservas: acc.totalReservas + d.totalReservas,
+      totalDiarias: acc.totalDiarias + d.totalDiarias,
+      valorBrutoTotal: acc.valorBrutoTotal + d.valorBrutoTotal, 
+      totalLimpeza: acc.totalLimpeza + d.totalLimpeza,
+      totalComissao: acc.totalComissao + d.totalComissao,
+      totalDeducoes: acc.totalDeducoes + d.totalDeducoes,
+      valorLiquidoRepassado: acc.valorLiquidoRepassado + d.valorLiquidoRepassado,
+    }), { totalReservas: 0, totalDiarias: 0, valorBrutoTotal: 0, totalLimpeza: 0, totalComissao: 0, totalDeducoes: 0, valorLiquidoRepassado: 0 });
+    totais.mediaDiaria = totais.totalDiarias > 0 ? (totais.valorBrutoTotal - totais.totalLimpeza) / totais.totalDiarias : 0;
+
+    const doc = new jsPDF();
+    let y = desenharCabecalho(doc, {
+      subtitulo: 'Relatório Anual de Prestação de Contas',
+      imovelNome: imovel.nome_referencia,
+      proprietarioNome: imovel.proprietarios?.nome || '—',
+      periodoTexto: `Ano de ${ano}`,
+    });
+    y = desenharIndicadores(doc, y, { ...totais, taxaOcupacao: null });
+
+    doc.autoTable({
+      startY: y,
+      margin: { bottom: 20 },
+      head: [['Mês', 'Reservas', 'Diárias', 'Bruto', 'Limpeza', 'Comissão', 'Deduções', 'Líquido']],
+      body: dadosPorMes.map((d, i) => [
+        NOMES_MES[i], String(d.totalReservas), String(d.totalDiarias), fmtMoeda(d.valorBrutoTotal),
+        fmtMoeda(d.totalLimpeza), fmtMoeda(d.totalComissao), d.totalDeducoes ? '− ' + fmtMoeda(d.totalDeducoes) : '—', fmtMoeda(d.valorLiquidoRepassado),
+      ]),
+      foot: [['Total', String(totais.totalReservas), String(totais.totalDiarias), fmtMoeda(totais.valorBrutoTotal),
+        fmtMoeda(totais.totalLimpeza), fmtMoeda(totais.totalComissao), totais.totalDeducoes ? '− ' + fmtMoeda(totais.totalDeducoes) : '—', fmtMoeda(totais.valorLiquidoRepassado)]],
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [0, 74, 173] },
+      footStyles: { fillColor: [241, 245, 249], textColor: [30, 41, 59], fontStyle: 'bold' },
+    });
+
+    desenharRodape(doc);
+    abrirPreview(doc, `relatorio-anual-${imovel.nome_referencia.replace(/\s+/g, '_')}-${ano}.pdf`, {
+      imovelId, tipo: 'anual', periodoTexto: `Ano de ${ano}`,
+    });
+  }
+
+  document.getElementById('btn-gerar-pdf').addEventListener('click', async () => {
+    const tipo = document.querySelector('input[name="rl-tipo"]:checked').value;
+    const btn = document.getElementById('btn-gerar-pdf');
+    btn.disabled = true;
+    btn.textContent = 'Gerando...';
+    try {
+      if (tipo === 'mensal') await gerarPdfMensal();
+      else await gerarPdfAnual();
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Visualizar Relatório';
+    }
+  });
+
+  document.getElementById('rl-mes').value = new Date().toISOString().slice(0, 7);
+  document.getElementById('rl-ano').value = new Date().getFullYear();
+  await carregarImoveis();
+</script>
+</body>
+</html>

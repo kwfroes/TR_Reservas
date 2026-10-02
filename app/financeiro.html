@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Financeiro — TR Serviços de Reservas</title>
+<link rel="icon" type="image/svg+xml" href="../assets/img/logo.svg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/theme.css">
+</head>
+<body class="min-h-screen bg-slate-50">
+
+  <div class="flex flex-col sm:flex-row min-h-screen">
+
+    <header class="sm:hidden flex items-center justify-between px-4 py-3 tr-bg-azul text-white sticky top-0 z-20">
+      <button id="btn-menu-abrir" aria-label="Abrir menu" aria-expanded="false" class="p-1 -ml-1">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="tr-logo-ring rounded-md w-7 h-7 flex items-center justify-center">
+          <span class="text-xs font-extrabold"><span style="color: var(--tr-verde)">T</span><span class="text-white">R</span></span>
+        </div>
+        <span class="text-sm font-semibold">TR Reservas</span>
+      </div>
+      <span class="w-6" aria-hidden="true"></span>
+    </header>
+
+    <div id="sidebar-overlay" class="hidden sm:hidden fixed inset-0 bg-black/40 z-30"></div>
+
+    <aside id="sidebar"
+      class="fixed sm:static inset-y-0 left-0 z-40 w-64 sm:w-56 shrink-0 tr-bg-azul text-white flex flex-col -translate-x-full sm:translate-x-0 transition-transform duration-200">
+      <div class="flex items-center justify-between gap-2 px-4 py-4">
+        <div class="flex items-center gap-2">
+          <div class="tr-logo-ring rounded-md w-8 h-8 flex items-center justify-center shrink-0">
+            <span class="text-sm font-extrabold">
+              <span style="color: var(--tr-verde)">T</span><span class="text-white">R</span>
+            </span>
+          </div>
+          <span class="text-sm font-semibold">TR Reservas</span>
+        </div>
+        <button id="btn-menu-fechar" aria-label="Fechar menu" class="sm:hidden p-1 text-white/80 hover:text-white">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 px-2 space-y-1 text-sm">
+        <a href="dashboard.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></a>
+        <a href="reservas.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Reservas</span></a>
+        <a href="imoveis.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg><span>Imóveis</span></a>
+        <a href="proprietarios.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Proprietários</span></a>
+        <a href="financeiro.html" class="tr-nav-item ativo flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg><span>Financeiro</span></a>
+        <a href="fechamento.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="m9 14 2 2 4-4"/></svg><span>Fechamento</span></a>
+        <a href="relatorios.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor,administrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/></svg><span>Relatórios</span></a>
+        <a href="parametros.html" class="tr-nav-item flex items-center gap-2.5 rounded-lg px-3 py-2" data-perfil="gestor"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span>Parâmetros</span></a>
+      </nav>
+
+      <div class="px-4 py-4 border-t border-white/10">
+        <p id="usuario-nome" class="text-xs text-white/70 mb-2">—</p>
+        <button id="btn-sair" class="text-xs text-white/70 hover:text-white underline">Sair</button>
+      </div>
+    </aside>
+
+    <main class="flex-1 p-4 sm:p-6 min-w-0">
+     <div class="max-w-5xl mx-auto">
+
+      <h1 class="text-xl font-bold text-slate-900 mb-1">Financeiro</h1>
+      <p class="text-sm text-slate-500 mb-6">Repasses, manutenções, despesas, pessoal e estoque — cada assunto na sua aba.</p>
+
+      <div class="tr-card overflow-hidden">
+       <div class="flex flex-col sm:flex-row">
+
+        <!-- Abas: barra horizontal no mobile, menu lateral a partir de sm -->
+        <nav class="shrink-0 flex sm:flex-col overflow-x-auto sm:overflow-x-visible sm:w-48 border-b sm:border-b-0 sm:border-r border-slate-200 bg-slate-50">
+          <button type="button" data-tab="repasses"
+            class="tr-tab-btn ativo border-b-2 sm:border-b-0 sm:border-l-2 px-4 py-3 text-sm text-left whitespace-nowrap sm:whitespace-normal">Repasses</button>
+          <button type="button" data-tab="manutencoes"
+            class="tr-tab-btn border-b-2 sm:border-b-0 sm:border-l-2 px-4 py-3 text-sm text-left whitespace-nowrap sm:whitespace-normal">Manutenções</button>
+          <button type="button" data-tab="despesas"
+            class="tr-tab-btn border-b-2 sm:border-b-0 sm:border-l-2 px-4 py-3 text-sm text-left whitespace-nowrap sm:whitespace-normal">Despesas</button>
+          <button type="button" data-tab="pagamentos"
+            class="tr-tab-btn border-b-2 sm:border-b-0 sm:border-l-2 px-4 py-3 text-sm text-left whitespace-nowrap sm:whitespace-normal">Pessoal</button>
+          <button type="button" data-tab="estoque"
+            class="tr-tab-btn border-b-2 sm:border-b-0 sm:border-l-2 px-4 py-3 text-sm text-left whitespace-nowrap sm:whitespace-normal">Estoque</button>
+          <button type="button" data-tab="logs"
+            class="tr-tab-btn border-b-2 sm:border-b-0 sm:border-l-2 px-4 py-3 text-sm text-left whitespace-nowrap sm:whitespace-normal">Logs</button>
+        </nav>
+
+        <!-- Conteúdo de cada aba -->
+        <div class="flex-1 min-w-0 p-4 sm:p-6">
+
+          <!-- ===================== REPASSES ===================== -->
+          <div data-painel="repasses">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+              <p class="text-xs text-slate-500 max-w-sm">
+                Enquanto pendente, soma reservas e manutenções ao vivo. Ao marcar como pago, o valor fica congelado.
+              </p>
+              <input id="repasse-mes" type="month" class="tr-input rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div class="overflow-x-auto border border-slate-200 rounded-lg">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-slate-500 border-b border-slate-200 bg-slate-50">
+                    <th class="px-4 py-2 font-medium">Imóvel</th>
+                    <th class="px-4 py-2 font-medium text-right">Bruto</th>
+                    <th class="px-4 py-2 font-medium text-right">Deduções</th>
+                    <th class="px-4 py-2 font-medium text-right">Líquido</th>
+                    <th class="px-4 py-2 font-medium">Status</th>
+                    <th class="px-4 py-2 font-medium"></th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-repasses"></tbody>
+              </table>
+              <p id="repasses-vazio" class="hidden px-4 py-6 text-sm text-slate-400">Nenhum repasse gerado para este mês ainda.</p>
+            </div>
+          </div>
+
+          <!-- ===================== MANUTENÇÕES ===================== -->
+          <div data-painel="manutencoes" class="hidden">
+            <p class="text-xs text-slate-500 mb-3">Marcadas como "cobrado do proprietário" entram automaticamente no próximo repasse do imóvel.</p>
+
+            <form id="form-manutencao" class="grid grid-cols-2 sm:grid-cols-6 gap-2 mb-3">
+              <select id="mn-imovel" required class="tr-input col-span-2 sm:col-span-1 rounded-lg border border-slate-300 px-2 py-2 text-sm"></select>
+              <input id="mn-data" type="date" required class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="mn-servico" type="text" placeholder="Serviço" required class="tr-input sm:col-span-2 rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="mn-valor" type="number" step="0.01" min="0" placeholder="Valor (R$)" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <label class="flex items-center gap-2 text-xs text-slate-600">
+                <input id="mn-cobrado" type="checkbox" class="rounded border-slate-300">
+                Cobrar do proprietário
+              </label>
+              <div class="flex gap-2">
+                <button type="submit" id="mn-btn-salvar" class="tr-btn flex-1 rounded-lg px-3 py-2 text-sm font-semibold">Adicionar</button>
+                <button type="button" id="mn-btn-cancelar" class="hidden rounded-lg px-3 py-2 text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Cancelar</button>
+              </div>
+            </form>
+
+            <div class="overflow-x-auto border border-slate-200 rounded-lg">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-slate-500 border-b border-slate-200 bg-slate-50">
+                    <th class="px-4 py-2 font-medium">Imóvel</th>
+                    <th class="px-4 py-2 font-medium">Data</th>
+                    <th class="px-4 py-2 font-medium">Serviço</th>
+                    <th class="px-4 py-2 font-medium text-right">Valor</th>
+                    <th class="px-4 py-2 font-medium">Responsável</th>
+                    <th class="px-4 py-2 font-medium">Status</th>
+                    <th class="px-4 py-2 font-medium"></th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-manutencoes"></tbody>
+              </table>
+              <p id="manutencoes-vazio" class="hidden px-4 py-6 text-sm text-slate-400">Nenhuma manutenção lançada ainda.</p>
+            </div>
+          </div>
+
+          <!-- ===================== DESPESAS DA TR ===================== -->
+          <div data-painel="despesas" class="hidden">
+            <p class="text-xs text-slate-500 mb-3">Despesas parceladas são rateadas automaticamente pelos meses seguintes.</p>
+
+            <form id="form-despesa" class="grid grid-cols-2 sm:grid-cols-6 gap-2 mb-3">
+              <input id="ds-data" type="date" required class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="ds-item" type="text" placeholder="Item" required class="tr-input sm:col-span-2 rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="ds-forma" type="text" placeholder="Forma de pagamento" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="ds-valor" type="number" step="0.01" min="0" required placeholder="Valor (R$)" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="ds-parcelas" type="number" min="1" value="1" placeholder="Parcelas" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <div class="flex gap-2 col-span-2 sm:col-span-1">
+                <button type="submit" id="ds-btn-salvar" class="tr-btn flex-1 rounded-lg px-3 py-2 text-sm font-semibold">Adicionar</button>
+                <button type="button" id="ds-btn-cancelar" class="hidden rounded-lg px-3 py-2 text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Cancelar</button>
+              </div>
+            </form>
+
+            <div class="overflow-x-auto border border-slate-200 rounded-lg">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-slate-500 border-b border-slate-200 bg-slate-50">
+                    <th class="px-4 py-2 font-medium">Data</th>
+                    <th class="px-4 py-2 font-medium">Item</th>
+                    <th class="px-4 py-2 font-medium">Pagamento</th>
+                    <th class="px-4 py-2 font-medium text-right">Valor</th>
+                    <th class="px-4 py-2 font-medium text-right">Parcelas</th>
+                    <th class="px-4 py-2 font-medium"></th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-despesas"></tbody>
+              </table>
+              <p id="despesas-vazio" class="hidden px-4 py-6 text-sm text-slate-400">Nenhuma despesa lançada ainda.</p>
+            </div>
+          </div>
+
+          <!-- ===================== PAGAMENTOS DE PESSOAL ===================== -->
+          <div data-painel="pagamentos" class="hidden">
+            <p class="text-xs text-slate-500 mb-3">Ex.: diárias de limpeza pagas às funcionárias.</p>
+
+            <form id="form-pagamento" class="grid grid-cols-2 sm:grid-cols-6 gap-2 mb-3">
+              <input id="pg-funcionario" type="text" placeholder="Funcionário(a)" required class="tr-input sm:col-span-2 rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="pg-data" type="date" required class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="pg-valor" type="number" step="0.01" min="0" required placeholder="Valor (R$)" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="pg-imoveis" type="text" placeholder="Imóveis atendidos" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="pg-recibo" type="text" placeholder="Nº do recibo" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <div class="flex gap-2">
+                <button type="submit" id="pg-btn-salvar" class="tr-btn flex-1 rounded-lg px-3 py-2 text-sm font-semibold">Adicionar</button>
+                <button type="button" id="pg-btn-cancelar" class="hidden rounded-lg px-3 py-2 text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Cancelar</button>
+              </div>
+            </form>
+
+            <div class="overflow-x-auto border border-slate-200 rounded-lg">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-slate-500 border-b border-slate-200 bg-slate-50">
+                    <th class="px-4 py-2 font-medium">Funcionário(a)</th>
+                    <th class="px-4 py-2 font-medium">Data</th>
+                    <th class="px-4 py-2 font-medium text-right">Valor</th>
+                    <th class="px-4 py-2 font-medium">Imóveis</th>
+                    <th class="px-4 py-2 font-medium">Recibo</th>
+                    <th class="px-4 py-2 font-medium"></th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-pagamentos"></tbody>
+              </table>
+              <p id="pagamentos-vazio" class="hidden px-4 py-6 text-sm text-slate-400">Nenhum pagamento lançado ainda.</p>
+            </div>
+          </div>
+
+          <!-- ===================== ESTOQUE ===================== -->
+          <div data-painel="estoque" class="hidden">
+            <p class="text-xs text-slate-500 mb-3">Itens de reposição (ex.: lençóis, produtos de limpeza).</p>
+
+            <form id="form-estoque" class="grid grid-cols-2 sm:grid-cols-6 gap-2 mb-3">
+              <input id="es-data" type="date" required class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="es-item" type="text" placeholder="Item" required class="tr-input sm:col-span-2 rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="es-quantidade" type="number" step="0.01" min="0" required placeholder="Qtd. comprada" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="es-quantidade-atual" type="number" step="0.01" min="0" required placeholder="Qtd. atual" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <input id="es-valor-unitario" type="number" step="0.01" min="0" placeholder="Valor unit. (R$)" class="tr-input rounded-lg border border-slate-300 px-2 py-2 text-sm">
+              <div class="flex gap-2">
+                <button type="submit" id="es-btn-salvar" class="tr-btn flex-1 rounded-lg px-3 py-2 text-sm font-semibold">Adicionar</button>
+                <button type="button" id="es-btn-cancelar" class="hidden rounded-lg px-3 py-2 text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Cancelar</button>
+              </div>
+            </form>
+
+            <div class="overflow-x-auto border border-slate-200 rounded-lg">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-slate-500 border-b border-slate-200 bg-slate-50">
+                    <th class="px-4 py-2 font-medium">Data da compra</th>
+                    <th class="px-4 py-2 font-medium">Item</th>
+                    <th class="px-4 py-2 font-medium text-right">Comprada</th>
+                    <th class="px-4 py-2 font-medium text-right">Atual</th>
+                    <th class="px-4 py-2 font-medium text-right">Valor unit.</th>
+                    <th class="px-4 py-2 font-medium"></th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-estoque"></tbody>
+              </table>
+              <p id="estoque-vazio" class="hidden px-4 py-6 text-sm text-slate-400">Nenhum item de estoque lançado ainda.</p>
+            </div>
+          </div>
+
+          <!-- ===================== LOGS ===================== -->
+          <div data-painel="logs" class="hidden">
+            <p class="text-xs text-slate-500 mb-3">Histórico de criação, edição e exclusão em todo o sistema (últimos 200 registros).</p>
+            <div class="overflow-x-auto border border-slate-200 rounded-lg">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-slate-500 border-b border-slate-200 bg-slate-50">
+                    <th class="px-4 py-2 font-medium">Quando</th>
+                    <th class="px-4 py-2 font-medium">Usuário</th>
+                    <th class="px-4 py-2 font-medium">Ação</th>
+                    <th class="px-4 py-2 font-medium">Tabela</th>
+                    <th class="px-4 py-2 font-medium">Descrição</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-logs"></tbody>
+              </table>
+              <p id="logs-vazio" class="hidden px-4 py-6 text-sm text-slate-400">Nenhum registro ainda.</p>
+            </div>
+          </div>
+
+        </div>
+       </div>
+      </div>
+
+     </div>
+    </main>
+  </div>
+
+<script type="module">
+  import { exigirSessao, exigirPerfil, sair, aplicarVisibilidadePorPerfil } from '../assets/js/auth-guard.js';
+  import { initSidebarMobile } from '../assets/js/sidebar.js';
+  import { supabase } from '../assets/js/supabaseClient.js';
+  import { mostrarAlerta, confirmarAcao, exibirDetalhes } from '../assets/js/modal.js';
+  import { ratearDespesa, confirmarSeMesFechado, recalcularFechamentosFechados, sincronizarRepassesDoMes } from '../assets/js/calculo.js';
+  import { registrarLog } from '../assets/js/log.js';
+  import { celulaAcoes, btnVisualizar, btnEditar, btnExcluir } from '../assets/js/icones.js';
+
+  initSidebarMobile();
+
+  const { nome, perfil } = await exigirSessao();
+  exigirPerfil(perfil, ['gestor', 'administrador']); // dupla garantia — RLS de `repasses` já bloqueia operador no banco
+
+  document.getElementById('usuario-nome').textContent = `${nome} · ${perfil}`;
+  aplicarVisibilidadePorPerfil(perfil);
+  document.getElementById('btn-sair').addEventListener('click', sair);
+
+  // ----------------------- Abas -----------------------
+  function ativarAba(tabId) {
+    document.querySelectorAll('.tr-tab-btn').forEach((b) => b.classList.toggle('ativo', b.dataset.tab === tabId));
+    document.querySelectorAll('[data-painel]').forEach((p) => p.classList.toggle('hidden', p.dataset.painel !== tabId));
+  }
+  document.querySelectorAll('.tr-tab-btn').forEach((b) => b.addEventListener('click', () => ativarAba(b.dataset.tab)));
+
+  const fmtMoeda = (v) => (v ?? 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  const fmtData = (iso) => new Date(iso + 'T00:00:00').toLocaleDateString('pt-BR');
+  const hoje = () => new Date().toISOString().slice(0, 10);
+  const mesAtual = () => new Date().toISOString().slice(0, 7);
+
+  let imoveisCache = [];
+  async function carregarImoveis() {
+    if (imoveisCache.length) return imoveisCache;
+    const { data, error } = await supabase.from('imoveis').select('id, nome_referencia, codigo_interno').order('nome_referencia');
+    if (error) { await mostrarAlerta('Erro ao carregar imóveis: ' + error.message, { titulo: 'Erro' }); return []; }
+    imoveisCache = data;
+    return data;
+  }
+
+  async function preencherSelectsImoveis() {
+    const imoveis = await carregarImoveis();
+    document.querySelectorAll('.select-imovel').forEach((select) => {
+      select.innerHTML = '<option value="">Selecione...</option>';
+      imoveis.forEach((im) => {
+        const opt = document.createElement('option');
+        opt.value = im.id;
+        opt.textContent = `${im.nome_referencia} (${im.codigo_interno})`;
+        select.appendChild(opt);
+      });
+    });
+  }
+  document.getElementById('mn-imovel').classList.add('select-imovel');
+
+  // ======================================================================
+  // REPASSES
+  // ======================================================================
+  function inicioFimDoMes(mesStr) {
+    const [ano, mes] = mesStr.split('-').map(Number);
+    const inicio = `${mesStr}-01`;
+    const fim = mes === 12 ? `${ano + 1}-01-01` : `${ano}-${String(mes + 1).padStart(2, '0')}-01`;
+    return { inicio, fim };
+  }
+
+  async function carregarRepasses() {
+    const mes = document.getElementById('repasse-mes').value;
+    if (!mes) return;
+    const { inicio } = inicioFimDoMes(mes);
+
+    try {
+      await sincronizarRepassesDoMes(inicio); // recalcula os pendentes antes de exibir
+    } catch (err) {
+      await mostrarAlerta('Erro ao atualizar repasses: ' + err.message, { titulo: 'Erro' });
+    }
+
+    const { data, error } = await supabase
+      .from('repasses')
+      .select('*, imoveis!imovel_id(nome_referencia)')
+      .eq('mes_referencia', inicio)
+      .order('valor_bruto', { ascending: false });
+
+    if (error) { await mostrarAlerta('Erro ao carregar repasses: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-repasses');
+    tbody.innerHTML = '';
+    document.getElementById('repasses-vazio').classList.toggle('hidden', data.length > 0);
+
+    data.forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row';
+      tr.innerHTML = `
+        <td class="px-5 py-2.5 font-medium text-slate-800">${r.imoveis?.nome_referencia || '—'}</td>
+        <td class="px-5 py-2.5 text-right">${fmtMoeda(r.valor_bruto)}</td>
+        <td class="px-5 py-2.5 text-right text-amber-700">${r.deducoes ? '− ' + fmtMoeda(r.deducoes) : '—'}</td>
+        <td class="px-5 py-2.5 text-right font-semibold">${fmtMoeda(r.valor_liquido)}</td>
+        <td class="px-5 py-2.5">${r.status === 'pago'
+          ? '<span class="text-xs text-green-700 bg-green-50 rounded px-2 py-0.5">pago</span>'
+          : '<span class="text-xs text-amber-700 bg-amber-50 rounded px-2 py-0.5">pendente</span>'}</td>
+        <td class="px-5 py-2.5 text-right">
+          ${r.status === 'pago' ? '' : `<button data-id="${r.id}" class="btn-marcar-pago text-xs text-blue-600 hover:underline">Marcar como pago</button>`}
+        </td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-marcar-pago').forEach((b) => b.addEventListener('click', () => marcarRepassePago(b.dataset.id)));
+  }
+
+  async function marcarRepassePago(id) {
+    const ok = await confirmarAcao('Marcar este repasse como pago? Ele deixa de ser recalculado automaticamente.', { textoConfirmar: 'Marcar como pago' });
+    if (!ok) return;
+    const { data: repasse, error } = await supabase
+      .from('repasses').update({ status: 'pago', pago_em: new Date().toISOString() }).eq('id', id)
+      .select('mes_referencia, valor_liquido, imoveis!imovel_id(nome_referencia)').single();
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+    await registrarLog({
+      acao: 'editar', tabela: 'repasses', registroId: id,
+      descricao: `Repasse de ${repasse.imoveis?.nome_referencia || '—'} (${repasse.mes_referencia.slice(0, 7)}) marcado como pago — ${fmtMoeda(repasse.valor_liquido)}`,
+    });
+    carregarRepasses();
+  }
+
+  document.getElementById('repasse-mes').addEventListener('change', carregarRepasses);
+
+  // ======================================================================
+  // MANUTENÇÕES
+  // ======================================================================
+  async function carregarManutencoes() {
+    const { data, error } = await supabase
+      .from('manutencoes')
+      .select('*, imoveis!imovel_id(nome_referencia)')
+      .order('data', { ascending: false })
+      .limit(100);
+    if (error) { await mostrarAlerta('Erro ao carregar manutenções: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-manutencoes');
+    tbody.innerHTML = '';
+    document.getElementById('manutencoes-vazio').classList.toggle('hidden', data.length > 0);
+
+    data.forEach((m) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row';
+      tr.innerHTML = `
+        <td class="px-5 py-2.5 font-medium text-slate-800">${m.imoveis?.nome_referencia || '—'}</td>
+        <td class="px-5 py-2.5 text-slate-500">${fmtData(m.data)}</td>
+        <td class="px-5 py-2.5 text-slate-600">${m.servico}</td>
+        <td class="px-5 py-2.5 text-right">${m.valor != null ? fmtMoeda(m.valor) : '—'}</td>
+        <td class="px-5 py-2.5 text-slate-500">${m.cobrado_proprietario ? 'Proprietário' : 'Despesa TR'}</td>
+        <td class="px-5 py-2.5">
+          ${m.status === 'ok'
+            ? '<span class="text-xs text-green-700 bg-green-50 rounded px-2 py-0.5">ok</span>'
+            : `<button data-id="${m.id}" class="btn-concluir text-xs text-blue-600 hover:underline">marcar ok</button>`}
+          ${m.repasse_id ? '<span class="block text-xs text-slate-400 mt-0.5">já no repasse</span>' : ''}
+        </td>
+        <td class="px-5 py-2.5 text-right">${celulaAcoes(
+          btnVisualizar(m.id, 'btn-visualizar-manut'),
+          btnEditar(m.id, 'btn-editar-manut'),
+          btnExcluir(m.id, 'btn-excluir-manut'),
+        )}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-concluir').forEach((b) => b.addEventListener('click', () => concluirManutencao(b.dataset.id)));
+    tbody.querySelectorAll('.btn-visualizar-manut').forEach((b) => b.addEventListener('click', () => visualizarManutencao(b.dataset.id, data)));
+    tbody.querySelectorAll('.btn-editar-manut').forEach((b) => b.addEventListener('click', () => iniciarEdicaoManutencao(b.dataset.id)));
+    tbody.querySelectorAll('.btn-excluir-manut').forEach((b) => b.addEventListener('click', () => excluirManutencao(b.dataset.id)));
+  }
+
+  function visualizarManutencao(id, lista) {
+    const m = lista.find((x) => x.id === id);
+    if (!m) return;
+    exibirDetalhes({
+      titulo: `Manutenção — ${m.servico}`,
+      campos: [
+        { label: 'Imóvel', valor: m.imoveis?.nome_referencia },
+        { label: 'Data', valor: fmtData(m.data) },
+        { label: 'Serviço', valor: m.servico },
+        { label: 'Valor', valor: m.valor != null ? fmtMoeda(m.valor) : null },
+        { label: 'Responsável pelo custo', valor: m.cobrado_proprietario ? 'Proprietário' : 'Despesa TR' },
+        { label: 'Status', valor: m.status === 'ok' ? 'Concluída' : 'Pendente' },
+        { label: 'Já entrou em algum repasse?', valor: m.repasse_id ? 'Sim' : 'Não' },
+      ],
+    });
+  }
+
+  let manutencaoEditandoId = null;
+  let manutencaoEditandoAntiga = null; // { data, cobrado_proprietario } — só quando editando
+
+  function cancelarEdicaoManutencao() {
+    manutencaoEditandoId = null;
+    manutencaoEditandoAntiga = null;
+    document.getElementById('form-manutencao').reset();
+    document.getElementById('mn-btn-salvar').textContent = 'Adicionar';
+    document.getElementById('mn-btn-cancelar').classList.add('hidden');
+  }
+
+  async function iniciarEdicaoManutencao(id) {
+    const { data: m, error } = await supabase.from('manutencoes').select('*').eq('id', id).single();
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+
+    manutencaoEditandoId = id;
+    manutencaoEditandoAntiga = { data: m.data, cobrado_proprietario: m.cobrado_proprietario };
+    document.getElementById('mn-imovel').value = m.imovel_id;
+    document.getElementById('mn-data').value = m.data;
+    document.getElementById('mn-servico').value = m.servico;
+    document.getElementById('mn-valor').value = m.valor ?? '';
+    document.getElementById('mn-cobrado').checked = m.cobrado_proprietario;
+    document.getElementById('mn-btn-salvar').textContent = 'Salvar alterações';
+    document.getElementById('mn-btn-cancelar').classList.remove('hidden');
+    document.getElementById('mn-data').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  document.getElementById('mn-btn-cancelar').addEventListener('click', cancelarEdicaoManutencao);
+
+  document.getElementById('form-manutencao').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = document.getElementById('mn-data').value;
+    const cobradoProprietario = document.getElementById('mn-cobrado').checked;
+    const editando = !!manutencaoEditandoId;
+
+    // Só a manutenção paga pela própria TR entra no fechamento mensal (a
+    // cobrada do proprietário é descontada do repasse dele, não é despesa da TR).
+    // Editando, tanto o estado antigo quanto o novo podem afetar um fechamento.
+    const datasParaChecar = [];
+    if (!cobradoProprietario) datasParaChecar.push(data);
+    if (editando && !manutencaoEditandoAntiga.cobrado_proprietario) datasParaChecar.push(manutencaoEditandoAntiga.data);
+    if (datasParaChecar.length) {
+      const podeProsseguir = await confirmarSeMesFechado(datasParaChecar, confirmarAcao);
+      if (!podeProsseguir) return;
+    }
+
+    const payload = {
+      imovel_id: document.getElementById('mn-imovel').value,
+      data,
+      servico: document.getElementById('mn-servico').value.trim(),
+      valor: document.getElementById('mn-valor').value ? Number(document.getElementById('mn-valor').value) : null,
+      cobrado_proprietario: cobradoProprietario,
+    };
+
+    const { data: salvo, error } = editando
+      ? await supabase.from('manutencoes').update(payload).eq('id', manutencaoEditandoId).select().single()
+      : await supabase.from('manutencoes').insert({ ...payload, status: 'pendente' }).select().single();
+    if (error) { await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' }); return; }
+
+    if (datasParaChecar.length) await recalcularFechamentosFechados(datasParaChecar);
+    await registrarLog({
+      acao: editando ? 'editar' : 'criar', tabela: 'manutencoes', registroId: salvo.id,
+      descricao: `Manutenção "${payload.servico}" em ${data}${cobradoProprietario ? ' (cobrado do proprietário)' : ''}`,
+    });
+    cancelarEdicaoManutencao();
+    carregarManutencoes();
+    carregarRepasses();
+  });
+
+  async function concluirManutencao(id) {
+    const { error } = await supabase.from('manutencoes').update({ status: 'ok' }).eq('id', id);
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+    carregarManutencoes();
+    carregarRepasses();
+  }
+
+  async function excluirManutencao(id) {
+    const ok = await confirmarAcao('Excluir esta manutenção?', { perigo: true, textoConfirmar: 'Excluir' });
+    if (!ok) return;
+
+    const { data: manutencao, error: erroBusca } = await supabase
+      .from('manutencoes').select('data, servico, cobrado_proprietario').eq('id', id).single();
+    if (erroBusca) { await mostrarAlerta('Erro: ' + erroBusca.message, { titulo: 'Erro' }); return; }
+
+    if (!manutencao.cobrado_proprietario) {
+      const podeProsseguir = await confirmarSeMesFechado([manutencao.data], confirmarAcao);
+      if (!podeProsseguir) return;
+    }
+
+    const { error } = await supabase.from('manutencoes').delete().eq('id', id);
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+
+    if (!manutencao.cobrado_proprietario) await recalcularFechamentosFechados([manutencao.data]);
+    await registrarLog({
+      acao: 'excluir', tabela: 'manutencoes', registroId: id,
+      descricao: `Manutenção "${manutencao.servico}" (${manutencao.data})`,
+    });
+    carregarManutencoes();
+    carregarRepasses();
+  }
+
+  // ======================================================================
+  // DESPESAS DA TR
+  // ======================================================================
+  async function carregarDespesas() {
+    const { data, error } = await supabase.from('despesas_tr').select('*').order('data', { ascending: false }).limit(100);
+    if (error) { await mostrarAlerta('Erro ao carregar despesas: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-despesas');
+    tbody.innerHTML = '';
+    document.getElementById('despesas-vazio').classList.toggle('hidden', data.length > 0);
+
+    data.forEach((d) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row';
+      tr.innerHTML = `
+        <td class="px-5 py-2.5 text-slate-500">${fmtData(d.data)}</td>
+        <td class="px-5 py-2.5 font-medium text-slate-800">${d.item}</td>
+        <td class="px-5 py-2.5 text-slate-500">${d.forma_pagamento || '—'}</td>
+        <td class="px-5 py-2.5 text-right">${fmtMoeda(d.valor)}</td>
+        <td class="px-5 py-2.5 text-right text-slate-500">${d.num_parcelas}×</td>
+        <td class="px-5 py-2.5 text-right">${celulaAcoes(
+          btnVisualizar(d.id, 'btn-visualizar-despesa'),
+          btnEditar(d.id, 'btn-editar-despesa'),
+          btnExcluir(d.id, 'btn-excluir-despesa'),
+        )}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-visualizar-despesa').forEach((b) => b.addEventListener('click', () => visualizarDespesa(b.dataset.id, data)));
+    tbody.querySelectorAll('.btn-editar-despesa').forEach((b) => b.addEventListener('click', () => iniciarEdicaoDespesa(b.dataset.id)));
+    tbody.querySelectorAll('.btn-excluir-despesa').forEach((b) => b.addEventListener('click', () => excluirDespesa(b.dataset.id)));
+  }
+
+  function visualizarDespesa(id, lista) {
+    const d = lista.find((x) => x.id === id);
+    if (!d) return;
+    exibirDetalhes({
+      titulo: `Despesa — ${d.item}`,
+      campos: [
+        { label: 'Data', valor: fmtData(d.data) },
+        { label: 'Item', valor: d.item },
+        { label: 'Forma de pagamento', valor: d.forma_pagamento },
+        { label: 'Valor total', valor: fmtMoeda(d.valor) },
+        { label: 'Parcelas', valor: `${d.num_parcelas}×` },
+      ],
+    });
+  }
+
+  let despesaEditandoId = null;
+
+  function cancelarEdicaoDespesa() {
+    despesaEditandoId = null;
+    document.getElementById('form-despesa').reset();
+    document.getElementById('ds-parcelas').value = 1;
+    document.getElementById('ds-btn-salvar').textContent = 'Adicionar';
+    document.getElementById('ds-btn-cancelar').classList.add('hidden');
+  }
+
+  async function iniciarEdicaoDespesa(id) {
+    const { data: d, error } = await supabase.from('despesas_tr').select('*').eq('id', id).single();
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+
+    despesaEditandoId = id;
+    document.getElementById('ds-data').value = d.data;
+    document.getElementById('ds-item').value = d.item;
+    document.getElementById('ds-forma').value = d.forma_pagamento || '';
+    document.getElementById('ds-valor').value = d.valor;
+    document.getElementById('ds-parcelas').value = d.num_parcelas;
+    document.getElementById('ds-btn-salvar').textContent = 'Salvar alterações';
+    document.getElementById('ds-btn-cancelar').classList.remove('hidden');
+    document.getElementById('ds-data').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  document.getElementById('ds-btn-cancelar').addEventListener('click', cancelarEdicaoDespesa);
+
+  document.getElementById('form-despesa').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = document.getElementById('ds-data').value;
+    const valor = Number(document.getElementById('ds-valor').value || 0);
+    const numParcelas = Number(document.getElementById('ds-parcelas').value || 1);
+    const editando = !!despesaEditandoId;
+
+    const parcelasNovas = ratearDespesa({ data, valor, numParcelas });
+    let mesesAfetados = parcelasNovas.map((p) => p.mesReferencia);
+
+    // Editando: os meses das parcelas antigas também podem precisar de aviso/recálculo.
+    if (editando) {
+      const { data: parcelasAntigas, error: erroBusca } = await supabase
+        .from('despesa_parcelas').select('mes_referencia').eq('despesa_id', despesaEditandoId);
+      if (erroBusca) { await mostrarAlerta('Erro: ' + erroBusca.message, { titulo: 'Erro' }); return; }
+      mesesAfetados = [...new Set([...mesesAfetados, ...(parcelasAntigas || []).map((p) => p.mes_referencia)])];
+    }
+
+    const podeProsseguir = await confirmarSeMesFechado(mesesAfetados, confirmarAcao);
+    if (!podeProsseguir) return;
+
+    const payload = {
+      data,
+      item: document.getElementById('ds-item').value.trim(),
+      forma_pagamento: document.getElementById('ds-forma').value.trim() || null,
+      valor,
+      num_parcelas: numParcelas,
+    };
+
+    let despesaId = despesaEditandoId;
+    if (editando) {
+      const { error } = await supabase.from('despesas_tr').update(payload).eq('id', despesaEditandoId);
+      if (error) { await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' }); return; }
+      // Refaz as parcelas do zero — valor/data/parcelas podem ter mudado.
+      const { error: erroLimpa } = await supabase.from('despesa_parcelas').delete().eq('despesa_id', despesaEditandoId);
+      if (erroLimpa) { await mostrarAlerta('Erro ao atualizar parcelas: ' + erroLimpa.message, { titulo: 'Erro' }); return; }
+    } else {
+      const { data: despesa, error } = await supabase.from('despesas_tr').insert(payload).select().single();
+      if (error) { await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' }); return; }
+      despesaId = despesa.id;
+    }
+
+    const parcelas = parcelasNovas.map((p) => ({
+      despesa_id: despesaId,
+      mes_referencia: p.mesReferencia,
+      valor_parcela: p.valorParcela,
+    }));
+    const { error: erroParcelas } = await supabase.from('despesa_parcelas').insert(parcelas);
+    if (erroParcelas) await mostrarAlerta('Despesa salva, mas houve um erro ao gerar as parcelas: ' + erroParcelas.message, { titulo: 'Atenção' });
+
+    await recalcularFechamentosFechados(mesesAfetados);
+    await registrarLog({
+      acao: editando ? 'editar' : 'criar', tabela: 'despesas_tr', registroId: despesaId,
+      descricao: `Despesa "${payload.item}" de ${fmtMoeda(valor)} (${numParcelas}×)`,
+    });
+    cancelarEdicaoDespesa();
+    carregarDespesas();
+  });
+
+  async function excluirDespesa(id) {
+    const ok = await confirmarAcao('Excluir esta despesa? As parcelas geradas também serão removidas.', { perigo: true, textoConfirmar: 'Excluir' });
+    if (!ok) return;
+
+    const { data: despesa, error: erroDespesa } = await supabase.from('despesas_tr').select('item, valor').eq('id', id).single();
+    if (erroDespesa) { await mostrarAlerta('Erro: ' + erroDespesa.message, { titulo: 'Erro' }); return; }
+
+    const { data: parcelasExistentes, error: erroBusca } = await supabase
+      .from('despesa_parcelas').select('mes_referencia').eq('despesa_id', id);
+    if (erroBusca) { await mostrarAlerta('Erro: ' + erroBusca.message, { titulo: 'Erro' }); return; }
+    const mesesAfetados = (parcelasExistentes || []).map((p) => p.mes_referencia);
+
+    const podeProsseguir = await confirmarSeMesFechado(mesesAfetados, confirmarAcao);
+    if (!podeProsseguir) return;
+
+    const { error } = await supabase.from('despesas_tr').delete().eq('id', id);
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+
+    await recalcularFechamentosFechados(mesesAfetados);
+    await registrarLog({
+      acao: 'excluir', tabela: 'despesas_tr', registroId: id,
+      descricao: `Despesa "${despesa.item}" de ${fmtMoeda(despesa.valor)}`,
+    });
+    carregarDespesas();
+  }
+
+  // ======================================================================
+  // PAGAMENTOS DE PESSOAL
+  // ======================================================================
+  async function carregarPagamentos() {
+    const { data, error } = await supabase.from('pagamentos_pessoal').select('*').order('data', { ascending: false }).limit(100);
+    if (error) { await mostrarAlerta('Erro ao carregar pagamentos: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-pagamentos');
+    tbody.innerHTML = '';
+    document.getElementById('pagamentos-vazio').classList.toggle('hidden', data.length > 0);
+
+    data.forEach((p) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row';
+      tr.innerHTML = `
+        <td class="px-5 py-2.5 font-medium text-slate-800">${p.funcionario}</td>
+        <td class="px-5 py-2.5 text-slate-500">${fmtData(p.data)}</td>
+        <td class="px-5 py-2.5 text-right">${fmtMoeda(p.valor)}</td>
+        <td class="px-5 py-2.5 text-slate-500">${p.imoveis_atendidos || '—'}</td>
+        <td class="px-5 py-2.5 text-slate-500">${p.num_recibo || '—'}</td>
+        <td class="px-5 py-2.5 text-right">${celulaAcoes(
+          btnVisualizar(p.id, 'btn-visualizar-pagamento'),
+          btnEditar(p.id, 'btn-editar-pagamento'),
+          btnExcluir(p.id, 'btn-excluir-pagamento'),
+        )}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-visualizar-pagamento').forEach((b) => b.addEventListener('click', () => visualizarPagamento(b.dataset.id, data)));
+    tbody.querySelectorAll('.btn-editar-pagamento').forEach((b) => b.addEventListener('click', () => iniciarEdicaoPagamento(b.dataset.id)));
+    tbody.querySelectorAll('.btn-excluir-pagamento').forEach((b) => b.addEventListener('click', () => excluirPagamento(b.dataset.id)));
+  }
+
+  function visualizarPagamento(id, lista) {
+    const p = lista.find((x) => x.id === id);
+    if (!p) return;
+    exibirDetalhes({
+      titulo: `Pagamento — ${p.funcionario}`,
+      campos: [
+        { label: 'Funcionário(a)', valor: p.funcionario },
+        { label: 'Data', valor: fmtData(p.data) },
+        { label: 'Valor', valor: fmtMoeda(p.valor) },
+        { label: 'Imóveis atendidos', valor: p.imoveis_atendidos },
+        { label: 'Nº do recibo', valor: p.num_recibo },
+      ],
+    });
+  }
+
+  let pagamentoEditandoId = null;
+
+  function cancelarEdicaoPagamento() {
+    pagamentoEditandoId = null;
+    document.getElementById('form-pagamento').reset();
+    document.getElementById('pg-btn-salvar').textContent = 'Adicionar';
+    document.getElementById('pg-btn-cancelar').classList.add('hidden');
+  }
+
+  async function iniciarEdicaoPagamento(id) {
+    const { data: p, error } = await supabase.from('pagamentos_pessoal').select('*').eq('id', id).single();
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+
+    pagamentoEditandoId = id;
+    document.getElementById('pg-funcionario').value = p.funcionario;
+    document.getElementById('pg-data').value = p.data;
+    document.getElementById('pg-valor').value = p.valor;
+    document.getElementById('pg-imoveis').value = p.imoveis_atendidos || '';
+    document.getElementById('pg-recibo').value = p.num_recibo || '';
+    document.getElementById('pg-btn-salvar').textContent = 'Salvar alterações';
+    document.getElementById('pg-btn-cancelar').classList.remove('hidden');
+    document.getElementById('pg-data').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  document.getElementById('pg-btn-cancelar').addEventListener('click', cancelarEdicaoPagamento);
+
+  document.getElementById('form-pagamento').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      funcionario: document.getElementById('pg-funcionario').value.trim(),
+      data: document.getElementById('pg-data').value,
+      valor: Number(document.getElementById('pg-valor').value || 0),
+      imoveis_atendidos: document.getElementById('pg-imoveis').value.trim() || null,
+      num_recibo: document.getElementById('pg-recibo').value.trim() || null,
+    };
+
+    const editandoPagamento = !!pagamentoEditandoId;
+    const { data: salvo, error } = editandoPagamento
+      ? await supabase.from('pagamentos_pessoal').update(payload).eq('id', pagamentoEditandoId).select().single()
+      : await supabase.from('pagamentos_pessoal').insert(payload).select().single();
+    if (error) { await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' }); return; }
+
+    await registrarLog({
+      acao: editandoPagamento ? 'editar' : 'criar', tabela: 'pagamentos_pessoal', registroId: salvo.id,
+      descricao: `Pagamento de ${fmtMoeda(payload.valor)} a ${payload.funcionario} (${payload.data})`,
+    });
+    cancelarEdicaoPagamento();
+    carregarPagamentos();
+  });
+
+  async function excluirPagamento(id) {
+    const ok = await confirmarAcao('Excluir este pagamento?', { perigo: true, textoConfirmar: 'Excluir' });
+    if (!ok) return;
+    const { data: pagamento, error: erroBusca } = await supabase
+      .from('pagamentos_pessoal').select('funcionario, valor, data').eq('id', id).single();
+    if (erroBusca) { await mostrarAlerta('Erro: ' + erroBusca.message, { titulo: 'Erro' }); return; }
+    const { error } = await supabase.from('pagamentos_pessoal').delete().eq('id', id);
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+    await registrarLog({
+      acao: 'excluir', tabela: 'pagamentos_pessoal', registroId: id,
+      descricao: `Pagamento de ${fmtMoeda(pagamento.valor)} a ${pagamento.funcionario} (${pagamento.data})`,
+    });
+    carregarPagamentos();
+  }
+
+  // ======================================================================
+  // ESTOQUE
+  // ======================================================================
+  async function carregarEstoque() {
+    const { data, error } = await supabase.from('estoque').select('*').order('data_compra', { ascending: false }).limit(100);
+    if (error) { await mostrarAlerta('Erro ao carregar estoque: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-estoque');
+    tbody.innerHTML = '';
+    document.getElementById('estoque-vazio').classList.toggle('hidden', data.length > 0);
+
+    data.forEach((it) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row';
+      tr.innerHTML = `
+        <td class="px-4 py-2.5 text-slate-500">${fmtData(it.data_compra)}</td>
+        <td class="px-4 py-2.5 font-medium text-slate-800">${it.item}</td>
+        <td class="px-4 py-2.5 text-right text-slate-500">${it.quantidade}</td>
+        <td class="px-4 py-2.5 text-right">${it.quantidade_atual}</td>
+        <td class="px-4 py-2.5 text-right text-slate-500">${it.valor_unitario != null ? fmtMoeda(it.valor_unitario) : '—'}</td>
+        <td class="px-4 py-2.5 text-right">${celulaAcoes(
+          btnVisualizar(it.id, 'btn-visualizar-estoque'),
+          btnEditar(it.id, 'btn-editar-estoque'),
+          btnExcluir(it.id, 'btn-excluir-estoque'),
+        )}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('.btn-visualizar-estoque').forEach((b) => b.addEventListener('click', () => visualizarEstoque(b.dataset.id, data)));
+    tbody.querySelectorAll('.btn-editar-estoque').forEach((b) => b.addEventListener('click', () => iniciarEdicaoEstoque(b.dataset.id)));
+    tbody.querySelectorAll('.btn-excluir-estoque').forEach((b) => b.addEventListener('click', () => excluirEstoque(b.dataset.id)));
+  }
+
+  function visualizarEstoque(id, lista) {
+    const it = lista.find((x) => x.id === id);
+    if (!it) return;
+    exibirDetalhes({
+      titulo: `Estoque — ${it.item}`,
+      campos: [
+        { label: 'Data da compra', valor: fmtData(it.data_compra) },
+        { label: 'Item', valor: it.item },
+        { label: 'Quantidade comprada', valor: it.quantidade },
+        { label: 'Quantidade atual', valor: it.quantidade_atual },
+        { label: 'Valor unitário', valor: it.valor_unitario != null ? fmtMoeda(it.valor_unitario) : null },
+      ],
+    });
+  }
+
+  let estoqueEditandoId = null;
+
+  function cancelarEdicaoEstoque() {
+    estoqueEditandoId = null;
+    document.getElementById('form-estoque').reset();
+    document.getElementById('es-btn-salvar').textContent = 'Adicionar';
+    document.getElementById('es-btn-cancelar').classList.add('hidden');
+  }
+
+  async function iniciarEdicaoEstoque(id) {
+    const { data: it, error } = await supabase.from('estoque').select('*').eq('id', id).single();
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+
+    estoqueEditandoId = id;
+    document.getElementById('es-data').value = it.data_compra;
+    document.getElementById('es-item').value = it.item;
+    document.getElementById('es-quantidade').value = it.quantidade;
+    document.getElementById('es-quantidade-atual').value = it.quantidade_atual;
+    document.getElementById('es-valor-unitario').value = it.valor_unitario ?? '';
+    document.getElementById('es-btn-salvar').textContent = 'Salvar alterações';
+    document.getElementById('es-btn-cancelar').classList.remove('hidden');
+  }
+
+  document.getElementById('es-btn-cancelar').addEventListener('click', cancelarEdicaoEstoque);
+
+  document.getElementById('form-estoque').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const editando = !!estoqueEditandoId;
+    const payload = {
+      data_compra: document.getElementById('es-data').value,
+      item: document.getElementById('es-item').value.trim(),
+      quantidade: Number(document.getElementById('es-quantidade').value || 0),
+      quantidade_atual: Number(document.getElementById('es-quantidade-atual').value || 0),
+      valor_unitario: document.getElementById('es-valor-unitario').value ? Number(document.getElementById('es-valor-unitario').value) : null,
+    };
+
+    const { data: salvo, error } = editando
+      ? await supabase.from('estoque').update(payload).eq('id', estoqueEditandoId).select().single()
+      : await supabase.from('estoque').insert(payload).select().single();
+    if (error) { await mostrarAlerta('Erro ao salvar: ' + error.message, { titulo: 'Erro' }); return; }
+
+    await registrarLog({
+      acao: editando ? 'editar' : 'criar', tabela: 'estoque', registroId: salvo.id,
+      descricao: `Estoque "${payload.item}" — qtd. atual ${payload.quantidade_atual}`,
+    });
+    cancelarEdicaoEstoque();
+    carregarEstoque();
+  });
+
+  async function excluirEstoque(id) {
+    const ok = await confirmarAcao('Excluir este item do estoque?', { perigo: true, textoConfirmar: 'Excluir' });
+    if (!ok) return;
+    const { data: item, error: erroBusca } = await supabase.from('estoque').select('item').eq('id', id).single();
+    if (erroBusca) { await mostrarAlerta('Erro: ' + erroBusca.message, { titulo: 'Erro' }); return; }
+    const { error } = await supabase.from('estoque').delete().eq('id', id);
+    if (error) { await mostrarAlerta('Erro: ' + error.message, { titulo: 'Erro' }); return; }
+    await registrarLog({ acao: 'excluir', tabela: 'estoque', registroId: id, descricao: `Estoque "${item.item}"` });
+    carregarEstoque();
+  }
+
+  // ======================================================================
+  // LOGS (histórico de criar/editar/excluir)
+  // ======================================================================
+  const ROTULO_ACAO = { criar: 'Criou', editar: 'Editou', excluir: 'Excluiu' };
+
+  async function carregarLogs() {
+    const { data, error } = await supabase
+      .from('logs_atividade')
+      .select('criado_em, acao, tabela, descricao, usuarios(nome)')
+      .order('criado_em', { ascending: false })
+      .limit(200);
+    if (error) { await mostrarAlerta('Erro ao carregar logs: ' + error.message, { titulo: 'Erro' }); return; }
+
+    const tbody = document.getElementById('tbody-logs');
+    tbody.innerHTML = '';
+    document.getElementById('logs-vazio').classList.toggle('hidden', data.length > 0);
+
+    data.forEach((l) => {
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-100 tr-row';
+      tr.innerHTML = `
+        <td class="px-4 py-2.5 text-slate-500 whitespace-nowrap">${new Date(l.criado_em).toLocaleString('pt-BR')}</td>
+        <td class="px-4 py-2.5 text-slate-700">${l.usuarios?.nome || '—'}</td>
+        <td class="px-4 py-2.5 text-slate-500">${ROTULO_ACAO[l.acao] || l.acao}</td>
+        <td class="px-4 py-2.5 text-slate-500">${l.tabela}</td>
+        <td class="px-4 py-2.5 text-slate-700">${l.descricao || '—'}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.querySelector('[data-tab="logs"]').addEventListener('click', carregarLogs);
+
+  // ======================================================================
+  // Inicialização
+  // ======================================================================
+  document.getElementById('repasse-mes').value = mesAtual();
+  document.getElementById('mn-data').value = hoje();
+  document.getElementById('ds-data').value = hoje();
+  document.getElementById('pg-data').value = hoje();
+  document.getElementById('es-data').value = hoje();
+
+  await preencherSelectsImoveis();
+  carregarRepasses();
+  carregarManutencoes();
+  carregarDespesas();
+  carregarPagamentos();
+  carregarEstoque();
+</script>
+</body>
+</html>
